@@ -1,0 +1,446 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* Variables */
+:root {
+  --dresscode-red: #c53030;
+  --dresscode-text: #4a4a4a;
+  --dresscode-light-text: #666666;
+  --dresscode-dark: #2d3748;
+  --dresscode-white: #ffffff;
+}
+
+.dresscode-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+.dresscode-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 4rem 3rem;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decoración de fondo sutil */
+.dresscode-content::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23f0f0f0" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>') repeat;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+/* Header */
+.dresscode-header {
+  margin-bottom: 3rem;
+}
+
+.dresscode-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--dresscode-red);
+  margin: 0 0 0.5rem 0;
+  line-height: 1;
+}
+
+.dresscode-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--dresscode-text);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+/* Sección de vestimenta */
+.attire-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.attire-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.attire-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--dresscode-text);
+  margin: 0 0 2rem 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.attire-illustration {
+  width: 120px;
+  height: 160px;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+/* Ilustración del traje */
+.suit-illustration {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.suit-jacket {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 90px;
+  background-color: var(--dresscode-dark);
+  border-radius: 8px 8px 0 0;
+}
+
+.lapel-left,
+.lapel-right {
+  position: absolute;
+  top: 0;
+  width: 20px;
+  height: 40px;
+  background-color: var(--dresscode-dark);
+}
+
+.lapel-left {
+  left: -5px;
+  transform: rotate(-15deg);
+  border-radius: 8px 0 0 0;
+}
+
+.lapel-right {
+  right: -5px;
+  transform: rotate(15deg);
+  border-radius: 0 8px 0 0;
+}
+
+.suit-buttons {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.button {
+  width: 6px;
+  height: 6px;
+  background-color: var(--dresscode-white);
+  border-radius: 50%;
+}
+
+.suit-pants {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  background-color: var(--dresscode-dark);
+  border-radius: 0 0 8px 8px;
+}
+
+.bow-tie {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.bow-left,
+.bow-right {
+  width: 12px;
+  height: 8px;
+  background-color: var(--dresscode-dark);
+  border-radius: 50%;
+}
+
+.bow-center {
+  width: 6px;
+  height: 12px;
+  background-color: var(--dresscode-dark);
+  border-radius: 2px;
+}
+
+/* Ilustración del vestido */
+.dress-illustration {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.dress-top {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 40px;
+  background-color: var(--dresscode-red);
+  border-radius: 8px 8px 0 0;
+}
+
+.dress-strap-left,
+.dress-strap-right {
+  position: absolute;
+  top: -10px;
+  width: 8px;
+  height: 25px;
+  background-color: var(--dresscode-red);
+  border-radius: 4px;
+}
+
+.dress-strap-left {
+  left: 10px;
+}
+
+.dress-strap-right {
+  right: 10px;
+}
+
+.dress-waist {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 15px;
+  background-color: var(--dresscode-red);
+}
+
+.dress-skirt {
+  position: absolute;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 80px;
+  background-color: var(--dresscode-red);
+  border-radius: 0 0 50px 50px;
+  position: relative;
+}
+
+.dress-fold-1,
+.dress-fold-2,
+.dress-fold-3 {
+  position: absolute;
+  width: 2px;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.1);
+  top: 10px;
+}
+
+.dress-fold-1 {
+  left: 30%;
+}
+
+.dress-fold-2 {
+  left: 50%;
+}
+
+.dress-fold-3 {
+  left: 70%;
+}
+
+/* Sección de colores */
+.colors-section {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 2rem;
+}
+
+.colors-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--dresscode-text);
+  margin: 0 0 1.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.color-palette {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.color-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid var(--dresscode-white);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.color-circle:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dresscode-content {
+    padding: 3rem 2rem;
+    margin: 1rem;
+  }
+  
+  .dresscode-title {
+    font-size: 2.8rem;
+  }
+  
+  .dresscode-subtitle {
+    font-size: 1.4rem;
+  }
+  
+  .attire-section {
+    gap: 2rem;
+  }
+  
+  .attire-illustration {
+    width: 100px;
+    height: 140px;
+  }
+  
+  .color-circle {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dresscode-content {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .dresscode-title {
+    font-size: 2.2rem;
+  }
+  
+  .dresscode-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .attire-section {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .attire-illustration {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+  }
+  
+  .suit-icon,
+  .dress-icon {
+    width: 70px;
+    height: 70px;
+    max-width: 70px;
+    max-height: 70px;
+  }
+  
+  .suit-icon {
+    transform: scale(3.0);
+  }
+  
+  .dress-icon {
+    transform: scale(1.3);
+  }
+  
+  .suit-icon:hover {
+    transform: scale(3.1);
+  }
+  
+  .dress-icon:hover {
+    transform: scale(1.35);
+  }
+  
+  .color-circle {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .color-palette {
+    gap: 0.8rem;
+  }
+}
+
+/* Estilos para los iconos PNG */
+.suit-icon,
+.dress-icon {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease, filter 0.3s ease;
+  /* Forzar el mismo tamaño visual */
+  max-width: 90px;
+  max-height: 90px;
+}
+
+/* Ajuste específico para cada icono si es necesario */
+.suit-icon {
+  /* El traje el doble de grande */
+  transform: scale(2.3);
+}
+
+.dress-icon {
+  /* El vestido mantiene el tamaño actual */
+  transform: scale(1.5);
+}
+
+.suit-icon:hover {
+  transform: scale(3.1);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+}
+
+.dress-icon:hover {
+  transform: scale(1.35);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+}
+
+/* Ajustar el contenedor de ilustración para los iconos */
+.attire-illustration {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Asegurar que ambos iconos tengan el mismo espacio */
+  padding: 15px;
+  border: 1px solid transparent; /* Para debug, cambiar a red si necesitas ver el contenedor */
+}

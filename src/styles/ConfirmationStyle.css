@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* Variables */
+:root {
+  --confirmation-red: #c53030;
+  --confirmation-text: #4a4a4a;
+  --confirmation-light-text: #666666;
+  --confirmation-dark: #2d3748;
+  --confirmation-white: #ffffff;
+  --confirmation-cream: #f8f5f0;
+}
+
+.confirmation-container {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+}
+
+.confirmation-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
+  width: 100%;
+}
+
+.confirmation-card {
+  background: var(--confirmation-cream);
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  position: relative;
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+}
+
+.confirmation-card:hover {
+  transform: rotate(0deg);
+}
+
+.card-text {
+  position: relative;
+  z-index: 2;
+}
+
+.confirmation-message {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--confirmation-text);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+  font-style: italic;
+}
+
+.rsvp-button {
+  background: var(--confirmation-red);
+  color: var(--confirmation-white);
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(197, 48, 48, 0.3);
+}
+
+.rsvp-button:hover {
+  background: #a02828;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(197, 48, 48, 0.4);
+}
+
+.rsvp-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .confirmation-container {
+    padding: 0.5rem;
+    min-height: 40vh;
+  }
+  
+  .confirmation-card {
+    padding: 1.5rem 1.2rem;
+    max-width: 350px;
+  }
+  
+  .confirmation-message {
+    font-size: 1rem;
+  }
+  
+  .rsvp-button {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .confirmation-container {
+    padding: 0.5rem;
+    min-height: 35vh;
+  }
+  
+  .confirmation-card {
+    padding: 1.2rem 1rem;
+    max-width: 300px;
+  }
+  
+  .confirmation-message {
+    font-size: 0.95rem;
+  }
+  
+  .rsvp-button {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+}

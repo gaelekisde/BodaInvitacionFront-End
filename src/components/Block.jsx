@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/BlockStyle.css";
+import apiUtils from "../utils/apiUtils";
 
 function BlockScreen() {
     const [code, setCode] = useState("");
@@ -8,37 +9,27 @@ function BlockScreen() {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Códigos válidos LUEGO LO CAMBIAMOS A LA API
-    const validCodes = ["BODA24", "GAEL01", "JARED01", "INVITE", "123456"];
-
     const handleCodeChange = (e) => {
         const value = e.target.value.toUpperCase();
         setCode(value);
-        setError(""); // Limpiar error al escribir
+        setError("");
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (!code.trim()) {
-            setError("Por favor ingresa un código");
-            return;
-        }
-
         setIsLoading(true);
         setError("");
 
-        //validación
-        if (validCodes.includes(code)) {
-            // Código válido - guardar en localStorage y navegar
-            localStorage.setItem("validCode", code);
-            localStorage.setItem("authTime", new Date().getTime().toString());
+        const result = await apiUtils.login(code);
+
+        if (result.success && result.data.message === "Login exitoso") {
+            // La cookie httpOnly no es visible en document.cookie; el navegador la enviará automáticamente.
             navigate("/main");
         } else {
-            // Código inválido
-            setError("Código inválido. Intenta nuevamente.");
+            setError(result.error || "Código inválido. Intenta nuevamente.");
             setCode("");
         }
+        
         setIsLoading(false);
     };
 

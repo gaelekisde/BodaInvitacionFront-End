@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* Variables */
+:root {
+  --counter-red: #c53030;
+  --counter-text: #4a4a4a;
+  --counter-light-text: #666666;
+  --counter-dark: #2d3748;
+  --counter-white: #ffffff;
+  --counter-pink: #f4e6e6;
+}
+
+.counter-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+.counter-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 4rem 3rem;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decoración de fondo sutil */
+.counter-content::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23f0f0f0" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>') repeat;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+/* Título principal */
+.counter-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4rem;
+  font-weight: 600;
+  color: var(--counter-red);
+  margin: 0 0 1rem 0;
+  line-height: 1;
+}
+
+.counter-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--counter-text);
+  margin: 0 0 2rem 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 3rem 0;
+  flex-wrap: wrap;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 600;
+  color: var(--counter-dark);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.time-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--counter-light-text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.separator {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--counter-text);
+  margin: 0 0.5rem;
+}
+
+/* Anillos */
+.rings-container {
+  margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Flower icon replacing rings */
+.flower-icon {
+  width: 140px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+}
+
+.ring {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 10px;
+}
+
+.ring-band {
+  width: 100%;
+  height: 100%;
+  border: 4px solid var(--counter-red);
+  border-radius: 50%;
+  background: transparent;
+  position: relative;
+}
+
+.ring-stone {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--counter-red);
+  border-radius: 50%;
+}
+
+.ribbon-left,
+.ribbon-right {
+  position: absolute;
+  bottom: -20px;
+  width: 40px;
+  height: 30px;
+  background: var(--counter-red);
+}
+
+.ribbon-left {
+  left: 20px;
+  transform: rotate(-10deg);
+  border-radius: 0 0 10px 5px;
+}
+
+.ribbon-right {
+  right: 20px;
+  transform: rotate(10deg);
+  border-radius: 0 0 5px 10px;
+}
+
+.ribbon-left::before,
+.ribbon-right::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.ribbon-left::before {
+  left: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid var(--counter-red);
+  border-bottom: 10px solid var(--counter-red);
+}
+
+.ribbon-right::before {
+  right: 0;
+  border-left: 10px solid var(--counter-red);
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--counter-red);
+}
+
+/* Firma */
+.counter-signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--counter-text);
+  margin: 2rem 0 0 0;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .counter-content {
+    padding: 3rem 2rem;
+  }
+  
+  .counter-title {
+    font-size: 3rem;
+  }
+  
+  .countdown {
+    gap: 1rem;
+  }
+  
+  .time-number {
+    font-size: 3rem;
+  }
+  
+  .separator {
+    font-size: 2rem;
+  }
+  
+  .flower-icon {
+    width: 110px;
+  }
+}
+
+@media (max-width: 480px) {
+  .counter-title {
+    font-size: 2.5rem;
+  }
+  
+  .countdown {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .separator {
+    display: none;
+  }
+  
+  .time-number {
+    font-size: 2.5rem;
+  }
+  
+  .counter-signature {
+    font-size: 1.5rem;
+  }
+}

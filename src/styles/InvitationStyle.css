@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* Variables */
+:root {
+  --invitation-red: #c53030;
+  --invitation-text: #4a4a4a;
+  --invitation-light-text: #666666;
+  --invitation-white: #ffffff;
+  --invitation-cream: #faf9f7;
+}
+
+.invitation-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+}
+
+.invitation-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 4rem 3rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decoración de fondo sutil */
+.invitation-content::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="floral" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="2" fill="%23f0f0f0" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23floral)"/></svg>') repeat;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+/* Nombres de los novios */
+.couple-names {
+  margin-bottom: 2.5rem;
+}
+
+.groom-name,
+.bride-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--invitation-red);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ampersand {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: var(--invitation-red);
+  margin: 0.5rem 0;
+  font-weight: 400;
+}
+
+/* Mensaje principal */
+.main-message {
+  margin-bottom: 2.5rem;
+}
+
+.invitation-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--invitation-text);
+  line-height: 1.6;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Fecha */
+.date-section {
+  margin-bottom: 2.5rem;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+}
+
+.date-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--invitation-text);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.year-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--invitation-text);
+  margin: 0;
+  letter-spacing: 3px;
+}
+
+/* Lugar y hora */
+.venue-section {
+  margin-bottom: 2.5rem;
+}
+
+.venue-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--invitation-text);
+  margin: 0 0 0.5rem 0;
+  font-style: italic;
+}
+
+.time-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--invitation-text);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+/* Mensaje final */
+.final-message {
+  margin-bottom: 1.5rem;
+}
+
+.confirmation-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--invitation-light-text);
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Decoración floral */
+.floral-decoration {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  opacity: 0.3;
+}
+
+.flower-accent {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, var(--invitation-red) 30%, transparent 30%);
+  border-radius: 50%;
+  position: relative;
+}
+
+.flower-accent::before,
+.flower-accent::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--invitation-red);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.flower-accent::before {
+  top: -10px;
+  left: 10px;
+}
+
+.flower-accent::after {
+  bottom: -10px;
+  right: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .invitation-content {
+    padding: 3rem 2rem;
+    margin: 1rem;
+  }
+  
+  .groom-name,
+  .bride-name {
+    font-size: 2.2rem;
+  }
+  
+  .ampersand {
+    font-size: 1.6rem;
+  }
+  
+  .invitation-text {
+    font-size: 1rem;
+  }
+  
+  .date-text {
+    font-size: 1.1rem;
+  }
+  
+  .year-text {
+    font-size: 1.5rem;
+  }
+  
+  .venue-text {
+    font-size: 1.2rem;
+  }
+  
+  .time-text {
+    font-size: 1.1rem;
+  }
+  
+  .confirmation-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .invitation-content {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .groom-name,
+  .bride-name {
+    font-size: 1.9rem;
+  }
+  
+  .ampersand {
+    font-size: 1.4rem;
+  }
+  
+  .invitation-text {
+    font-size: 0.9rem;
+  }
+  
+  .date-text {
+    font-size: 1rem;
+  }
+  
+  .year-text {
+    font-size: 1.3rem;
+  }
+  
+  .venue-text {
+    font-size: 1.1rem;
+  }
+  
+  .time-text {
+    font-size: 1rem;
+  }
+  
+  .confirmation-text {
+    font-size: 0.85rem;
+  }
+}

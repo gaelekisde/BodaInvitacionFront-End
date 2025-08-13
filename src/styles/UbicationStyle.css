@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* Variables */
+:root {
+  --ubication-red: #c53030;
+  --ubication-text: #4a4a4a;
+  --ubication-light-text: #666666;
+  --ubication-dark: #2d3748;
+  --ubication-white: #ffffff;
+  --ubication-cream: #f8f5f0;
+}
+
+.ubication-container {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+}
+
+.ubication-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
+  width: 100%;
+}
+
+.ubication-card {
+  background: var(--ubication-cream);
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  max-width: 350px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  position: relative;
+  transform: rotate(1.5deg);
+  transition: transform 0.3s ease;
+}
+
+.ubication-card:hover {
+  transform: rotate(0deg);
+}
+
+.card-text {
+  position: relative;
+  z-index: 2;
+}
+
+.ubication-message {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--ubication-text);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+  font-style: italic;
+}
+
+.location-button {
+  background: var(--ubication-red);
+  color: var(--ubication-white);
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(197, 48, 48, 0.3);
+}
+
+.location-button:hover {
+  background: #a02828;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(197, 48, 48, 0.4);
+}
+
+.location-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ubication-container {
+    padding: 0.5rem;
+    min-height: 40vh;
+  }
+  
+  .ubication-card {
+    padding: 1.5rem 1.2rem;
+    max-width: 300px;
+  }
+  
+  .ubication-message {
+    font-size: 1rem;
+  }
+  
+  .location-button {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ubication-container {
+    padding: 0.5rem;
+    min-height: 35vh;
+  }
+  
+  .ubication-card {
+    padding: 1.2rem 1rem;
+    max-width: 280px;
+  }
+  
+  .ubication-message {
+    font-size: 0.95rem;
+  }
+  
+  .location-button {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+}

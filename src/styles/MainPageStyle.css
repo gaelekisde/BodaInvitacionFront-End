@@ -1,0 +1,237 @@
+/* Contenedor principal sin fondo (ya está definido globalmente) */
+.page-container {
+  min-height: 400vh; /* Altura suficiente para los cuatro componentes */
+  position: relative;
+}
+
+.invitacion-container {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Contenido de la invitación */
+.header,
+.contenido {
+  position: relative;
+}
+
+.header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.titulo {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--rose-gold);
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), 1px 1px 2px rgba(255, 255, 255, 0.5);
+  margin: 0;
+  letter-spacing: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+}
+
+.contenido {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  max-width: 800px;
+  width: 100%;
+}
+
+/* Film Strip Styles */
+.film-strip {
+  position: relative;
+  background-color: var(--film-black);
+  padding: 0.8rem 0;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+}
+
+.film-holes-left,
+.film-holes-right {
+  width: 20px;
+  height: 100%;
+  background: var(--film-black);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0.5rem 0;
+}
+
+.film-holes-left::before,
+.film-holes-left::after,
+.film-holes-right::before,
+.film-holes-right::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-color: var(--primary-pink);
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.film-holes-left::before,
+.film-holes-right::before {
+  margin-bottom: 1rem;
+}
+
+.film-holes-left::after,
+.film-holes-right::after {
+  margin-top: 1rem;
+}
+
+.fotos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0 0.5rem;
+}
+
+/* Keyframes para la animación pulse */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.foto {
+  width: 200px;
+  height: 130px;
+  background-color: var(--white);
+  border: 2px solid var(--white);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: pulse 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+/* Efecto hover para pausar la animación */
+.foto:hover {
+  animation-play-state: paused;
+  transform: scale(1.1);
+}
+
+/* Animaciones escalonadas para cada foto */
+.foto-1 {
+  animation-delay: 0s;
+}
+
+.foto-2 {
+  animation-delay: 1s;
+}
+
+.foto-3 {
+  animation-delay: 2s;
+}
+
+.foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder styles */
+.foto.placeholder {
+  background: linear-gradient(45deg, #e0e0e0 25%, #f5f5f5 25%, #f5f5f5 50%, #e0e0e0 50%, #e0e0e0 75%, #f5f5f5 75%);
+  background-size: 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.placeholder-text {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Fecha Styles */
+.fecha-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fecha-numero {
+  font-family: 'Playfair Display', serif;
+  font-size: 4.5rem;
+  font-weight: 600;
+  color: var(--dark-text);
+  line-height: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 0.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .invitacion-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .titulo {
+    font-size: 2.8rem;
+  }
+  
+  .contenido {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .foto {
+    width: 180px;
+    height: 120px;
+  }
+  
+  .fecha-numero {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .titulo {
+    font-size: 2.2rem;
+  }
+  
+  .foto {
+    width: 160px;
+    height: 100px;
+  }
+  
+  .fecha-numero {
+    font-size: 3rem;
+  }
+  
+  .film-strip {
+    padding: 0.6rem 0;
+  }
+}

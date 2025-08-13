@@ -1,0 +1,106 @@
+/* Estilos globales para toda la aplicación */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+
+:root {
+  --primary-pink: #f4e6e6;
+  --rose-gold: red;
+  --dark-text: #2c2c2c;
+  --film-black: #1a1a1a;
+  --white: #ffffff;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fondo global fijo para toda la aplicación */
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Playfair Display', serif;
+  background-image: url('../images/Backgrounds/MainPageBG.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Para dispositivos móviles, usar una solución alternativa más robusta */
+@media (max-width: 768px), (max-device-width: 768px) {
+  html, body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+  
+  body {
+    background-attachment: scroll;
+    background: none;
+  }
+  
+  /* Crear un pseudo-elemento fijo para el fondo en móviles */
+  html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../images/Backgrounds/MainPageBG.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+}
+
+/* Detectar dispositivos iOS específicamente */
+@supports (-webkit-touch-callout: none) {
+  body {
+    background-attachment: scroll !important;
+    background: none !important;
+  }
+  
+  html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../images/Backgrounds/MainPageBG.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+}
+
+/* Overlay global para toda la aplicación */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(244, 230, 230, 0.3);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Asegurar que todo el contenido esté por encima del overlay */
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}

@@ -1,7 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import "./styles/global.css";
 import BlockScreen from "./components/Block";
+import MainPage from "./components/MainPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 createRoot(document.getElementById("root")).render(
@@ -9,7 +11,7 @@ createRoot(document.getElementById("root")).render(
     <Router>
       <Routes>
         <Route path="/" element={<BlockScreen />} />
-        {/* <Route 
+         <Route 
           path="/main" 
           element={
             <ProtectedRoute>
@@ -17,7 +19,7 @@ createRoot(document.getElementById("root")).render(
             </ProtectedRoute>
           } 
         />
-        <Route path="*" element={<Navigate to="/" replace />} /> */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   </StrictMode>

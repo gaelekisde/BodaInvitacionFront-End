@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+
+:root {
+  --menu-red: #c53030;
+  --menu-text: #2c2c2c;
+  --menu-white: #ffffff;
+  --menu-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.menu-container {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.menu-header,
+.menu-grid {
+  position: relative;
+  z-index: 2;
+}
+
+.menu-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.menu-monogram {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--menu-red);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  letter-spacing: 3px;
+}
+
+/* Estilo para la imagen de iniciales */
+.menu-monogram-image {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.menu-monogram-image:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 600px;
+  width: 100%;
+  align-items: start;
+  justify-items: center;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 150px;
+}
+
+.menu-item:hover {
+  transform: translateY(-5px);
+}
+
+.menu-icon-circle {
+  width: 75px;
+  height: 75px;
+  background-color: var(--menu-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  box-shadow: var(--menu-shadow);
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover .menu-icon-circle {
+  background-color: #a02626;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.menu-icon {
+  font-size: 1.8rem;
+  color: var(--menu-white);
+}
+
+.menu-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--menu-text);
+  margin: 0;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .menu-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .menu-monogram {
+    font-size: 3rem;
+  }
+  
+  .menu-monogram-image {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 350px;
+  }
+  
+  .menu-icon-circle {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .menu-icon {
+    font-size: 1.6rem;
+  }
+  
+  .menu-title {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-monogram {
+    font-size: 2.5rem;
+  }
+  
+  .menu-monogram-image {
+    width: 110px;
+    height: 110px;
+  }
+  
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 300px;
+  }
+  
+  .menu-icon-circle {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .menu-icon {
+    font-size: 1.4rem;
+  }
+  
+  .menu-title {
+    font-size: 0.8rem;
+  }
+}

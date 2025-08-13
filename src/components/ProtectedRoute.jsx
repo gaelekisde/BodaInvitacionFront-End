@@ -1,17 +1,28 @@
 import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import apiUtils from "../utils/apiUtils";
 
-// Hook para verificar si el usuario está autenticado
-function useAuth() {
-  // En una aplicación real, esto verificaría el token o sesión
-  // Por ahora, verificamos si hay algo en localStorage
-  return localStorage.getItem("validCode") !== null;
-}
-
-// Componente para proteger rutas
+// Componente para proteger rutas: renderiza de inmediato y redirige si el check falla
 function ProtectedRoute({ children }) {
-  const isAuthenticated = useAuth();
-  
-  return isAuthenticated ? children : <Navigate to="/" replace />;
+  const [redirect, setRedirect] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await apiUtils.getFamilia();
+        if (!mounted) return;
+        if (!res.success) setRedirect(true);
+      } catch {
+        if (!mounted) return;
+        setRedirect(true);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  if (redirect) return <Navigate to="/" replace />;
+  return children;
 }
 
 export default ProtectedRoute;
