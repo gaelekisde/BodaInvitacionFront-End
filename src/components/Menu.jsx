@@ -55,7 +55,7 @@ const Menu = () => {
     <div className="menu-container">
       <div className="menu-header">
         <img 
-          src="/src/images/Icons/Initials.png" 
+          src="/images/Icons/Initials.png" 
           alt="Iniciales de la pareja" 
           className="menu-monogram-image"
         />

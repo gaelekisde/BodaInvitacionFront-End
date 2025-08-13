@@ -25,7 +25,7 @@ const DressCode = () => {
             <h3 className="attire-title">Hombres</h3>
             <div className="attire-illustration">
               <img 
-                src="/src/images/Icons/MenSuit.png" 
+                src="/images/Icons/MenSuit.png" 
                 alt="Traje formal para hombres" 
                 className="suit-icon"
               />
@@ -37,7 +37,7 @@ const DressCode = () => {
             <h3 className="attire-title">Mujeres</h3>
             <div className="attire-illustration">
               <img 
-                src="/src/images/Icons/WomanSuit.png" 
+                src="/images/Icons/WomanSuit.png" 
                 alt="Vestido formal para mujeres" 
                 className="dress-icon"
               />

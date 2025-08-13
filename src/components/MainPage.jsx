@@ -33,13 +33,13 @@ const Invitacion = () => {
             <div className="film-holes-left"></div>
             <div className="fotos-container">
               <div className="foto foto-1">
-                <img src="/src/images/People/WhatsApp Image 2025-06-10 at 3.36.32 PM.jpeg" alt="Foto 1" />
+                <img src="/images/People/WhatsApp Image 2025-06-10 at 3.36.32 PM.jpeg" alt="Foto 1" />
               </div>
               <div className="foto foto-2">
-                <img src="/src/images/People/WhatsApp Image 2025-06-10 at 3.36.32 PM (1).jpeg" alt="Foto 2" />
+                <img src="/images/People/WhatsApp Image 2025-06-10 at 3.36.32 PM (1).jpeg" alt="Foto 2" />
               </div>
               <div className="foto foto-3">
-                <img src="/src/images/People/WhatsApp Image 2025-06-10 at 3.36.32 PM (2).jpeg" alt="Foto 3" />
+                <img src="/images/People/WhatsApp Image 2025-06-10 at 3.36.32 PM (2).jpeg" alt="Foto 3" />
               </div>
             </div>
             <div className="film-holes-right"></div>

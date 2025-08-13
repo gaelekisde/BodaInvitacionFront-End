@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "../styles/CounterStyle.css";
-import FlowerIcon from "../images/Icons/FlowerIcon.png";
 
 const Counter = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -63,7 +62,7 @@ const Counter = () => {
         </div>
 
         <div className="rings-container">
-          <img src={FlowerIcon} alt="Flores decorativas" className="flower-icon" />
+          <img src="/images/Icons/FlowerIcon.png" alt="Flores decorativas" className="flower-icon" />
         </div>
 
         <p className="counter-signature">Con amor, Omar & Karely</p>
