@@ -1,12 +1,8 @@
 const urlApi = () => {
-    //local
-    return "http://localhost:3000/api/";
-    //producción
-    //return "https://boda-invitacion-digital-fqxy.vercel.app/api/";
+    return import.meta.env.VITE_API_URL || "https://boda-invitacion-digital-fqxy.vercel.app/api/";
 };
 
-// Cache simple en memoria para evitar peticiones repetidas
-const FAMILIA_TTL_MS = 2 * 60 * 1000; // 2 minutos
+const FAMILIA_TTL_MS = 2 * 60 * 1000;
 let familiaCache = {
     apellido: null,
     expiry: 0,
@@ -18,7 +14,7 @@ const invalidateFamiliaCache = () => {
 };
 
 const getAuthHeaders = () => {
-    // Con cookies httpOnly no podemos leer el token en el cliente.
+    // Con cookies httpOnly no podemos leer el token en el cliente.l token en el cliente.
     // El servidor autentica por cookie; solo enviamos credentials: 'include'.
     return {
         "Content-Type": "application/json"
@@ -38,9 +34,7 @@ const login = async (codigo) => {
             })
         });
 
-        const data = await response.json();
-        console.log("Response data:", data);
-        console.log("URL usada:", `${urlApi()}auth/login`);
+    const data = await response.json();
 
     // Invalida cache al cambiar de sesión
     invalidateFamiliaCache();
@@ -49,8 +43,8 @@ const login = async (codigo) => {
             success: data.message === "Login exitoso",
             data: data
         };
-    } catch (error) {
-        console.error("Error en login:", error);
+    } catch {
+        // En producción, solo retorna el error
         return {
             success: false,
             error: "Error de conexión. Intenta nuevamente."
@@ -80,13 +74,11 @@ const getFamilia = async () => {
             headers: getAuthHeaders()
         });
         
-        // Logs mínimos para no saturar la consola
-        console.log("families/me status:", response.status);
+    // ...
         
         if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
         }
-        
         const data = await response.json();
         const apellido = data || "familia";
         // Actualiza cache con TTL
@@ -97,8 +89,8 @@ const getFamilia = async () => {
 
         const result = await familiaCache.inflight;
         return result;
-    } catch (error) {
-        console.error("Error al obtener familia:", error);
+    } catch {
+        // En producción, solo retorna el error
         return {
             success: false,
             apellido: "familia"
@@ -126,15 +118,13 @@ const actualizarEstado = async (estado = "Confirmado") => {
             }
             throw new Error("Error en la petición");
         }
-        
         const data = await response.json();
-        console.log("Estado actualizado:", data);
         return {
             success: true,
             data: data
         };
     } catch (error) {
-        console.error("Error al actualizar estado:", error);
+        // En producción, solo retorna el error
         return {
             success: false,
             error: error.message
@@ -155,13 +145,12 @@ const SendMessage = async (nuevoMensaje) => {
         });
 
         const data = await response.json();
-        console.log("Mensaje enviado:", data);
         return {
             success: true,
             data: data
         };
     } catch (error) {
-        console.error("Error al enviar mensaje:", error);
+        // En producción, solo retorna el error
         return {
             success: false,
             error: error.message

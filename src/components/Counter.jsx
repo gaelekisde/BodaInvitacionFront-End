@@ -13,9 +13,6 @@ const Counter = () => {
   useEffect(() => {
     const weddingDate = new Date('2026-03-28T18:00:00');
 
-    console.log('Wedding date:', weddingDate);
-    console.log('Current date:', new Date());
-
     const updateCountdown = () => {
       const now = new Date();
       const difference = weddingDate - now;

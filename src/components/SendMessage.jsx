@@ -15,28 +15,35 @@ const SendMessage = () => {
     cargarApellido();
   }, []);
 
+  const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const nuevoMensaje = formData.get("message");
 
     if (!nuevoMensaje || nuevoMensaje.trim() === "") {
-      alert("Por favor escribe un mensaje antes de enviar");
+      setErrorMessage("Por favor escribe un mensaje antes de enviar");
       return;
     }
 
     setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
     
     try {
       const result = await apiUtils.SendMessage(nuevoMensaje);
       if (result.success) {
-        alert("¡Mensaje enviado con éxito!");
-        e.target.reset(); // Limpiar el formulario
+        setSuccessMessage("¡Mensaje enviado con éxito!");
+        setMessage("");
+        e.target.reset();
       } else {
-        alert("Error al enviar mensaje: " + (result.error || "Error desconocido"));
+        setErrorMessage("Error al enviar mensaje: " + (result.error || "Error desconocido"));
       }
     } catch (error) {
-      alert("Error al enviar mensaje: " + error.message);
+      setErrorMessage("Error al enviar mensaje: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -49,6 +56,13 @@ const SendMessage = () => {
         <p className="send-message-subtitle">Comparte tus buenos deseos con los novios</p>
         
         <form className="message-form" onSubmit={handleSubmit}>
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+          {errorMessage && (
+            <div className="error-message">{errorMessage}</div>
+          )}
+          
           <div className="form-group">
             <label htmlFor="name" className="form-label">De parte de:</label>
             <input 
@@ -70,6 +84,8 @@ const SendMessage = () => {
               rows="4"
               placeholder="Escribe aquí tus buenos deseos para Omar y Karely..."
               required
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             ></textarea>
           </div>
           
