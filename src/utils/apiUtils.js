@@ -49,7 +49,7 @@ const login = async (codigo) => {
 
             // Verificar que la sesión esté realmente establecida
             const verifyRes = await getFamilia();
-            if (verifyRes.success && verifyRes.apellido && verifyRes.apellido !== "familia") {
+            if (verifyRes.success && verifyRes.apellido && verifyRes.apellido.trim() && verifyRes.apellido !== "familia") {
                 return {
                     success: true,
                     data: data
@@ -59,7 +59,7 @@ const login = async (codigo) => {
                 await new Promise(resolve => setTimeout(resolve, 300));
                 const retryRes = await getFamilia();
                 return {
-                    success: retryRes.success && retryRes.apellido && retryRes.apellido !== "familia",
+                    success: retryRes.success && retryRes.apellido && retryRes.apellido.trim() && retryRes.apellido !== "familia",
                     data: data
                 };
             }
@@ -114,8 +114,9 @@ const getFamilia = async () => {
                         if (!retryResponse.ok) {
                             throw new Error(`Error: ${retryResponse.status}`);
                         }
+                        // El endpoint devuelve directamente el apellido como string, ej: "Cruz"
                         const retryData = await retryResponse.json();
-                        const apellido = retryData || "familia";
+                        const apellido = retryData && retryData.trim() ? retryData.trim() : "familia";
                         familiaCache.apellido = apellido;
                         familiaCache.expiry = Date.now() + FAMILIA_TTL_MS;
                         return { success: true, apellido };
@@ -124,8 +125,9 @@ const getFamilia = async () => {
                 throw new Error(`Error: ${response.status}`);
             }
             
+            // El endpoint devuelve directamente el apellido como string, ej: "Cruz"
             const data = await response.json();
-            const apellido = data || "familia";
+            const apellido = data && data.trim ? data.trim() : (data || "familia");
             // Actualiza cache con TTL
             familiaCache.apellido = apellido;
             familiaCache.expiry = Date.now() + FAMILIA_TTL_MS;

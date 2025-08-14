@@ -21,7 +21,8 @@ function ProtectedRoute({ children }) {
         const res = await apiUtils.getFamilia();
         if (!mounted) return;
         
-        if (res.success && res.apellido && res.apellido !== "familia") {
+        // Verificar que tenemos un apellido válido (no genérico)
+        if (res.success && res.apellido && res.apellido.trim() && res.apellido !== "familia") {
           setAuthState('authenticated');
         } else {
           // Intentar una vez más después de un breve delay
@@ -30,7 +31,7 @@ function ProtectedRoute({ children }) {
             const retryRes = await apiUtils.getFamilia();
             if (!mounted) return;
             
-            if (retryRes.success && retryRes.apellido && retryRes.apellido !== "familia") {
+            if (retryRes.success && retryRes.apellido && retryRes.apellido.trim() && retryRes.apellido !== "familia") {
               setAuthState('authenticated');
             } else {
               setAuthState('unauthenticated');
