@@ -158,22 +158,39 @@ const getFamilia = async (codigoFamilia) => {
 };
 
 
-const actualizarEstado = async (codigoFamilia, estado = "Confirmado") => {
+const actualizarEstado = async (codigoFamiliaOrEstado, estado) => {
     try {
-        // If no codigoFamilia provided, get it from localStorage
-        const codigo = codigoFamilia || getCodigoFamilia();
+        let codigo, estadoFinal;
+        
+        // Handle different calling patterns:
+        // 1. Old: actualizarEstado("Confirmado") - only estado provided
+        // 2. New: actualizarEstado("MAR01", "Confirmado") - both provided
+        // 3. New: actualizarEstado(null, "Confirmado") - use stored codigo
+        
+        if (typeof codigoFamiliaOrEstado === 'string' && !estado) {
+            // Old calling pattern: actualizarEstado("Confirmado")
+            codigo = getCodigoFamilia();
+            estadoFinal = codigoFamiliaOrEstado;
+        } else {
+            // New calling pattern: actualizarEstado(codigoFamilia, estado)
+            codigo = codigoFamiliaOrEstado || getCodigoFamilia();
+            estadoFinal = estado || "Confirmado";
+        }
         
         if (!codigo) {
             console.error('No codigoFamilia available');
             return { success: false, error: "No se encontró el código de familia" };
         }
 
+        console.log('actualizarEstado - Making request to:', `${urlApi()}families/${codigo}/actualizar-estado`);
+        console.log('actualizarEstado - Estado:', estadoFinal);
+
         const response = await fetch(`${urlApi()}families/${codigo}/actualizar-estado`, {
             method: "PATCH",
             headers: getHeaders(),
             mode: 'cors',
             body: JSON.stringify({
-                "estado": estado
+                "estado": estadoFinal
             })
         });
         
