@@ -1,7 +1,7 @@
 const urlApi = () => {
-   return "http://localhost:3000/api/";
+   //return "http://localhost:3000/api/";
    //activar esto en produccion:
-   //return "https://boda-invitacion-digital-fqxy.vercel.app/api/";
+   return "https://boda-invitacion-digital-fqxy.vercel.app/api/";
 };
 
 // Simple headers for API requests (no authentication needed)
