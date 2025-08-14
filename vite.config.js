@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
         // rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy) => {
           proxy.on('proxyReq', (proxyReq) => {
-            // Ensure cookies can be set cross-origin in dev if backend uses them
+            // Set a static origin for development
             proxyReq.setHeader('Origin', 'http://localhost:5174');
           });
         }

@@ -1,105 +1,49 @@
 const urlApi = () => {
-    // En producción, usar la URL absoluta del backend
-    // En desarrollo, usar URL relativa para el proxy de Vite
-    const isDevelopment = import.meta.env.MODE === 'development';
-    const apiUrl = import.meta.env.VITE_API_URL;
-    
-    // Solo log en desarrollo para evitar spam en producción
-    if (isDevelopment) {
-        console.log('Environment:', { 
-            mode: import.meta.env.MODE, 
-            isDevelopment, 
-            apiUrl,
-            userAgent: navigator.userAgent.includes('iPhone') ? 'iOS' : 'Other'
-        });
-    }
-    
-    if (!isDevelopment && apiUrl) {
-        // Producción: usar URL absoluta del backend
-        const finalUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
-        if (isDevelopment) console.log('Using production API URL:', finalUrl);
-        return finalUrl;
-    } else if (!isDevelopment) {
-        // Fallback para producción si no hay VITE_API_URL
-        const fallbackUrl = "https://boda-invitacion-digital-fqxy.vercel.app/api/";
-        if (isDevelopment) console.log('Using fallback API URL:', fallbackUrl);
-        return fallbackUrl;
-    }
-    
-    // Desarrollo: usar proxy relativo
-    if (isDevelopment) console.log('Using development API URL: /api/');
-    return "/api/";
+   return "http://localhost:3000/api/";
+   //activar esto en produccion:
+   //return "https://boda-invitacion-digital-fqxy.vercel.app/api/";
 };
 
-const FAMILIA_TTL_MS = 2 * 60 * 1000;
-let familiaCache = {
-    apellido: null,
-    expiry: 0,
-    inflight: null,
-};
-
-const invalidateFamiliaCache = () => {
-    familiaCache = { apellido: null, expiry: 0, inflight: null };
-    // También limpiar el token almacenado
-    clearStoredToken();
-};
-
-// Helper para detectar iOS
-const isIOS = () => {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-};
-
-// Helper para manejar el token en localStorage como fallback para iOS
-const getStoredToken = () => {
-    try {
-        return localStorage.getItem('authToken');
-    } catch {
-        return null;
-    }
-};
-
-const setStoredToken = (token) => {
-    try {
-        localStorage.setItem('authToken', token);
-    } catch {
-        // Si falla localStorage, no hacer nada
-    }
-};
-
-const clearStoredToken = () => {
-    try {
-        localStorage.removeItem('authToken');
-    } catch {
-        // Si falla localStorage, no hacer nada
-    }
-};
-
-const getAuthHeaders = () => {
-    const headers = {
+// Simple headers for API requests (no authentication needed)
+const getHeaders = () => {
+    return {
         "Content-Type": "application/json",
         "Accept": "application/json",
         "Cache-Control": "no-cache"
     };
-    
-    // Para iOS, agregar el token en el header Authorization como fallback
-    const token = getStoredToken();
-    if (token && isIOS()) {
-        headers['Authorization'] = `Bearer ${token}`;
+};
+
+// Helper functions for managing codigoFamilia in localStorage
+const setCodigoFamilia = (codigoFamilia) => {
+    try {
+        localStorage.setItem('codigoFamilia', codigoFamilia);
+    } catch (error) {
+        console.error('Error saving codigoFamilia:', error);
     }
-    
-    return headers;
+};
+
+const getCodigoFamilia = () => {
+    try {
+        return localStorage.getItem('codigoFamilia');
+    } catch (error) {
+        console.error('Error retrieving codigoFamilia:', error);
+        return null;
+    }
+};
+
+const clearCodigoFamilia = () => {
+    try {
+        localStorage.removeItem('codigoFamilia');
+    } catch (error) {
+        console.error('Error clearing codigoFamilia:', error);
+    }
 };
 
 const login = async (codigo) => {
     try {
         const response = await fetch(`${urlApi()}auth/login`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            credentials: 'include',
+            headers: getHeaders(),
             mode: 'cors',
             body: JSON.stringify({
                 "CodigoFamilia": codigo
@@ -110,39 +54,17 @@ const login = async (codigo) => {
             throw new Error(`HTTP ${response.status}`);
         }
 
-    const data = await response.json();
+        const data = await response.json();
 
-    // Invalida cache al cambiar de sesión
-    invalidateFamiliaCache();
-
-        // Debug: verificar si se establecieron cookies
+        // Debug en desarrollo
         const isDevelopment = import.meta.env.MODE === 'development';
         if (isDevelopment) {
-            console.log('Login response headers:', [...response.headers.entries()]);
-            console.log('Cookies after login:', document.cookie);
-            console.log('Is iOS:', isIOS());
             console.log('Login response data:', data);
         }
 
-        // Para iOS, guardar el token en localStorage como fallback
-        if (isIOS()) {
-            // Primero intentar obtener el token de la respuesta JSON
-            if (data.token) {
-                setStoredToken(data.token);
-                console.log('Token from response stored for iOS fallback');
-            } else {
-                // Si no está en la respuesta, intentar extraerlo de las cookies
-                const cookies = document.cookie.split(';').reduce((acc, cookie) => {
-                    const [name, value] = cookie.trim().split('=');
-                    acc[name] = value;
-                    return acc;
-                }, {});
-                
-                if (cookies.token) {
-                    setStoredToken(cookies.token);
-                    console.log('Token from cookies stored for iOS fallback');
-                }
-            }
+        // Store codigoFamilia if login is successful
+        if (data.message === "Login exitoso" && data.codigoFamilia) {
+            setCodigoFamilia(data.codigoFamilia);
         }
 
         return {
@@ -151,7 +73,6 @@ const login = async (codigo) => {
         };
     } catch (error) {
         console.error('Login error:', error);
-        // En producción, solo retorna el error
         return {
             success: false,
             error: "Error de conexión. Intenta nuevamente."
@@ -160,73 +81,57 @@ const login = async (codigo) => {
 };
 
 
-const getFamilia = async () => {
-    const now = Date.now();
-
-    // 1️⃣ Respuesta desde cache si no está expirada
-    if (familiaCache.apellido && now < familiaCache.expiry) {
-        return { success: true, apellido: familiaCache.apellido };
-    }
-
-    // 2️⃣ Si hay petición en curso, esperar el mismo Promise
-    if (familiaCache.inflight) {
-        return await familiaCache.inflight;
-    }
-
-    // 3️⃣ Crear nueva petición
-    familiaCache.inflight = (async () => {
-        try {
-            // Debug: verificar cookies y headers disponibles
-            const isDevelopment = import.meta.env.MODE === 'development';
-            const headers = getAuthHeaders();
-            
-            if (isDevelopment) {
-                console.log('Cookies available:', document.cookie);
-                console.log('Stored token:', getStoredToken());
-                console.log('Headers to send:', headers);
-                console.log('Making request to:', `${urlApi()}families/me`);
-            }
-
-            const response = await fetch(`${urlApi()}families/me`, {
-                method: "GET",
-                credentials: "include",
-                mode: 'cors',
-                headers: headers
-            });
-
-            if (!response.ok) {
-                console.error(`families/me error: ${response.status}`);
-                console.error('Response headers:', [...response.headers.entries()]);
-                throw new Error(`Error: ${response.status}`);
-            }
-
-            const data = await response.json();
-            const apellido = data.Apellido || "familia";
-
-            // Actualizar cache con TTL
-            familiaCache.apellido = apellido;
-            familiaCache.expiry = Date.now() + FAMILIA_TTL_MS;
-
-            return { success: true, apellido };
-        } catch {
+const getFamilia = async (codigoFamilia) => {
+    try {
+        // If no codigoFamilia provided, get it from localStorage
+        const codigo = codigoFamilia || getCodigoFamilia();
+        
+        if (!codigo) {
+            console.error('No codigoFamilia available');
             return { success: false, apellido: "familia" };
-        } finally {
-            // Siempre limpiar inflight
-            familiaCache.inflight = null;
         }
-    })();
 
-    // 4️⃣ Devolver resultado
-    return await familiaCache.inflight;
+        // Debug en desarrollo
+        const isDevelopment = import.meta.env.MODE === 'development';
+        
+        if (isDevelopment) {
+            console.log('Making request to:', `${urlApi()}families/${codigo}`);
+        }
+
+        const response = await fetch(`${urlApi()}families/${codigo}`, {
+            method: "GET",
+            mode: 'cors',
+            headers: getHeaders()
+        });
+
+        if (!response.ok) {
+            console.error(`families/${codigo} error: ${response.status}`);
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const apellido = data.Apellido || "familia";
+
+        return { success: true, apellido };
+    } catch {
+        return { success: false, apellido: "familia" };
+    }
 };
 
 
-const actualizarEstado = async (estado = "Confirmado") => {
+const actualizarEstado = async (codigoFamilia, estado = "Confirmado") => {
     try {
-        const response = await fetch(`${urlApi()}families/actualizar-estado`, {
+        // If no codigoFamilia provided, get it from localStorage
+        const codigo = codigoFamilia || getCodigoFamilia();
+        
+        if (!codigo) {
+            console.error('No codigoFamilia available');
+            return { success: false, error: "No se encontró el código de familia" };
+        }
+
+        const response = await fetch(`${urlApi()}families/${codigo}/actualizar-estado`, {
             method: "PATCH",
-            headers: getAuthHeaders(),
-            credentials: 'include',
+            headers: getHeaders(),
             mode: 'cors',
             body: JSON.stringify({
                 "estado": estado
@@ -235,9 +140,6 @@ const actualizarEstado = async (estado = "Confirmado") => {
         
         if (!response.ok) {
             console.error(`actualizar-estado error: ${response.status}`);
-            if (response.status === 401) {
-                throw new Error("Sesión expirada");
-            }
             throw new Error("Error en la petición");
         }
         const data = await response.json();
@@ -247,7 +149,6 @@ const actualizarEstado = async (estado = "Confirmado") => {
         };
     } catch (error) {
         console.error('actualizarEstado error:', error);
-        // En producción, solo retorna el error
         return {
             success: false,
             error: error.message
@@ -255,16 +156,31 @@ const actualizarEstado = async (estado = "Confirmado") => {
     }
 };
 
-const SendMessage = async (nuevoMensaje) => {
-
+const SendMessage = async (codigoFamilia, nuevoMensaje) => {
     try {
-        const response = await fetch(`${urlApi()}families/mensaje`, {
+        // If codigoFamilia is actually the message (old API usage), handle it
+        let codigo, mensaje;
+        if (typeof codigoFamilia === 'string' && !nuevoMensaje) {
+            // Old usage: SendMessage(message)
+            codigo = getCodigoFamilia();
+            mensaje = codigoFamilia;
+        } else {
+            // New usage: SendMessage(codigoFamilia, message) or SendMessage(null, message)
+            codigo = codigoFamilia || getCodigoFamilia();
+            mensaje = nuevoMensaje;
+        }
+        
+        if (!codigo) {
+            console.error('No codigoFamilia available');
+            return { success: false, error: "No se encontró el código de familia" };
+        }
+
+        const response = await fetch(`${urlApi()}families/${codigo}/mensaje`, {
             method: "PATCH",
-            headers: getAuthHeaders(),
-            credentials: 'include',
+            headers: getHeaders(),
             mode: 'cors',
             body: JSON.stringify({
-                "nuevoMensaje": nuevoMensaje
+                "nuevoMensaje": mensaje
             })
         });
 
@@ -280,21 +196,111 @@ const SendMessage = async (nuevoMensaje) => {
         };
     } catch (error) {
         console.error('SendMessage error:', error);
-        // En producción, solo retorna el error
         return {
             success: false,
             error: error.message
         };
     }
 }
+
+// Additional API functions for complete CRUD operations
+
+const getAllFamilies = async () => {
+    try {
+        const response = await fetch(`${urlApi()}families`, {
+            method: "GET",
+            headers: getHeaders(),
+            mode: 'cors'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return {
+            success: true,
+            data: data
+        };
+    } catch (error) {
+        console.error('getAllFamilies error:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+};
+
+const createFamily = async (familyData) => {
+    try {
+        const response = await fetch(`${urlApi()}families`, {
+            method: "POST",
+            headers: getHeaders(),
+            mode: 'cors',
+            body: JSON.stringify(familyData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return {
+            success: true,
+            data: data
+        };
+    } catch (error) {
+        console.error('createFamily error:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+};
+
+const deleteFamily = async (id) => {
+    try {
+        const response = await fetch(`${urlApi()}families/${id}`, {
+            method: "DELETE",
+            headers: getHeaders(),
+            mode: 'cors'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return {
+            success: true,
+            data: data
+        };
+    } catch (error) {
+        console.error('deleteFamily error:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+};
+const logout = () => {
+    clearCodigoFamilia();
+};
+
 const apiUtils = {
     urlApi,
-    getAuthHeaders,
+    getHeaders,
     login,
+    logout,
     getFamilia,
     actualizarEstado,
     SendMessage,
-    invalidateFamiliaCache
+    getAllFamilies,
+    createFamily,
+    deleteFamily,
+    setCodigoFamilia,
+    getCodigoFamilia,
+    clearCodigoFamilia
 };
 
 export default apiUtils;

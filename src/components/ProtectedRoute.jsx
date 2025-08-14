@@ -12,9 +12,15 @@ function ProtectedRoute({ children }) {
       try {
         const res = await apiUtils.getFamilia();
         if (!mounted) return;
-        if (!res.success) setRedirect(true);
+        if (!res.success) {
+          // Clear stored data if authentication fails
+          apiUtils.logout();
+          setRedirect(true);
+        }
       } catch {
         if (!mounted) return;
+        // Clear stored data if authentication fails
+        apiUtils.logout();
         setRedirect(true);
       }
     })();
