@@ -42,6 +42,19 @@ const invalidateFamiliaCache = () => {
     familiaCache = { apellido: null, expiry: 0, inflight: null };
 };
 
+// Helper para detectar iOS
+const isIOS = () => {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+};
+
+// Helper para delay en iOS después de login
+const postLoginDelay = async () => {
+    if (isIOS()) {
+        await new Promise(resolve => setTimeout(resolve, 100)); // 100ms delay para iOS
+    }
+};
+
 const getAuthHeaders = () => {
     return {
         "Content-Type": "application/json",
@@ -74,6 +87,17 @@ const login = async (codigo) => {
     // Invalida cache al cambiar de sesión
     invalidateFamiliaCache();
 
+        // Debug: verificar si se establecieron cookies
+        const isDevelopment = import.meta.env.MODE === 'development';
+        if (isDevelopment) {
+            console.log('Login response headers:', [...response.headers.entries()]);
+            console.log('Cookies after login:', document.cookie);
+            console.log('Is iOS:', isIOS());
+        }
+
+        // Pequeño delay para iOS para que las cookies se asienten
+        await postLoginDelay();
+
         return {
             success: data.message === "Login exitoso",
             data: data
@@ -105,6 +129,13 @@ const getFamilia = async () => {
     // 3️⃣ Crear nueva petición
     familiaCache.inflight = (async () => {
         try {
+            // Debug: verificar cookies disponibles
+            const isDevelopment = import.meta.env.MODE === 'development';
+            if (isDevelopment) {
+                console.log('Cookies available:', document.cookie);
+                console.log('Making request to:', `${urlApi()}families/me`);
+            }
+
             const response = await fetch(`${urlApi()}families/me`, {
                 method: "GET",
                 credentials: "include",
@@ -114,6 +145,7 @@ const getFamilia = async () => {
 
             if (!response.ok) {
                 console.error(`families/me error: ${response.status}`);
+                console.error('Response headers:', [...response.headers.entries()]);
                 throw new Error(`Error: ${response.status}`);
             }
 
