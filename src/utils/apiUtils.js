@@ -40,6 +40,8 @@ let familiaCache = {
 
 const invalidateFamiliaCache = () => {
     familiaCache = { apellido: null, expiry: 0, inflight: null };
+    // También limpiar el token almacenado
+    clearStoredToken();
 };
 
 // Helper para detectar iOS
@@ -48,19 +50,45 @@ const isIOS = () => {
            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 };
 
-// Helper para delay en iOS después de login
-const postLoginDelay = async () => {
-    if (isIOS()) {
-        await new Promise(resolve => setTimeout(resolve, 100)); // 100ms delay para iOS
+// Helper para manejar el token en localStorage como fallback para iOS
+const getStoredToken = () => {
+    try {
+        return localStorage.getItem('authToken');
+    } catch {
+        return null;
+    }
+};
+
+const setStoredToken = (token) => {
+    try {
+        localStorage.setItem('authToken', token);
+    } catch {
+        // Si falla localStorage, no hacer nada
+    }
+};
+
+const clearStoredToken = () => {
+    try {
+        localStorage.removeItem('authToken');
+    } catch {
+        // Si falla localStorage, no hacer nada
     }
 };
 
 const getAuthHeaders = () => {
-    return {
+    const headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
         "Cache-Control": "no-cache"
     };
+    
+    // Para iOS, agregar el token en el header Authorization como fallback
+    const token = getStoredToken();
+    if (token && isIOS()) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    return headers;
 };
 
 const login = async (codigo) => {
@@ -95,8 +123,19 @@ const login = async (codigo) => {
             console.log('Is iOS:', isIOS());
         }
 
-        // Pequeño delay para iOS para que las cookies se asienten
-        await postLoginDelay();
+        // Para iOS, extraer el token de las cookies y guardarlo en localStorage como fallback
+        if (isIOS()) {
+            const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+                const [name, value] = cookie.trim().split('=');
+                acc[name] = value;
+                return acc;
+            }, {});
+            
+            if (cookies.token) {
+                setStoredToken(cookies.token);
+                console.log('Token stored for iOS fallback');
+            }
+        }
 
         return {
             success: data.message === "Login exitoso",
