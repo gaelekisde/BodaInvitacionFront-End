@@ -121,19 +121,27 @@ const login = async (codigo) => {
             console.log('Login response headers:', [...response.headers.entries()]);
             console.log('Cookies after login:', document.cookie);
             console.log('Is iOS:', isIOS());
+            console.log('Login response data:', data);
         }
 
-        // Para iOS, extraer el token de las cookies y guardarlo en localStorage como fallback
+        // Para iOS, guardar el token en localStorage como fallback
         if (isIOS()) {
-            const cookies = document.cookie.split(';').reduce((acc, cookie) => {
-                const [name, value] = cookie.trim().split('=');
-                acc[name] = value;
-                return acc;
-            }, {});
-            
-            if (cookies.token) {
-                setStoredToken(cookies.token);
-                console.log('Token stored for iOS fallback');
+            // Primero intentar obtener el token de la respuesta JSON
+            if (data.token) {
+                setStoredToken(data.token);
+                console.log('Token from response stored for iOS fallback');
+            } else {
+                // Si no está en la respuesta, intentar extraerlo de las cookies
+                const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+                    const [name, value] = cookie.trim().split('=');
+                    acc[name] = value;
+                    return acc;
+                }, {});
+                
+                if (cookies.token) {
+                    setStoredToken(cookies.token);
+                    console.log('Token from cookies stored for iOS fallback');
+                }
             }
         }
 
@@ -168,10 +176,14 @@ const getFamilia = async () => {
     // 3️⃣ Crear nueva petición
     familiaCache.inflight = (async () => {
         try {
-            // Debug: verificar cookies disponibles
+            // Debug: verificar cookies y headers disponibles
             const isDevelopment = import.meta.env.MODE === 'development';
+            const headers = getAuthHeaders();
+            
             if (isDevelopment) {
                 console.log('Cookies available:', document.cookie);
+                console.log('Stored token:', getStoredToken());
+                console.log('Headers to send:', headers);
                 console.log('Making request to:', `${urlApi()}families/me`);
             }
 
@@ -179,7 +191,7 @@ const getFamilia = async () => {
                 method: "GET",
                 credentials: "include",
                 mode: 'cors',
-                headers: getAuthHeaders()
+                headers: headers
             });
 
             if (!response.ok) {
