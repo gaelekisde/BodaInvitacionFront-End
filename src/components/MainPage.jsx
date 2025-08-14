@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/MainPageStyle.css";
 import Menu from "./Menu";
+import Quote from "./Quote";
 import Invitation from "./Invitation";
 import DressCode from "./DressCode";
 import Counter from "./Counter";
@@ -46,15 +47,17 @@ const Invitacion = () => {
           </div>
           
           <div className="fecha-container">
-            <div className="fecha-numero">06</div>
-            <div className="fecha-numero">05</div>
-            <div className="fecha-numero">25</div>
+            <div className="fecha-numero">28</div>
+            <div className="fecha-numero">03</div>
+            <div className="fecha-numero">26</div>
           </div>
         </div>
       </div>
-      
       <div id="menu">
         <Menu />
+      </div>
+      <div id="quote">
+        <Quote />
       </div>
       <div id="invitation">
         <Invitation />

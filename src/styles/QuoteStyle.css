@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* Variables */
+:root {
+  --quote-red: #c53030;
+  --quote-text: #4a4a4a;
+  --quote-light-text: #666666;
+  --quote-dark: #2d3748;
+  --quote-white: #ffffff;
+  --quote-cream: #f8f5f0;
+  --quote-gold: #d4af37;
+}
+
+.quote-container {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.quote-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
+  width: 100%;
+}
+
+.quote-card {
+  background: var(--quote-cream);
+  border-radius: 15px;
+  padding: 2.5rem 2rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  position: relative;
+  transform: rotate(1deg);
+  transition: transform 0.3s ease;
+  border: 2px solid var(--quote-gold);
+}
+
+.quote-card:hover {
+  transform: rotate(0deg);
+}
+
+.card-text {
+  position: relative;
+  z-index: 2;
+}
+
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--quote-text);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-style: italic;
+  position: relative;
+}
+
+.quote-text::before {
+  content: '"';
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
+  color: var(--quote-gold);
+  position: absolute;
+  left: -1.5rem;
+  top: -0.5rem;
+  line-height: 1;
+}
+
+.quote-text::after {
+  content: '"';
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
+  color: var(--quote-gold);
+  position: absolute;
+  right: -1.5rem;
+  bottom: -1rem;
+  line-height: 1;
+}
+
+.quote-reference {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--quote-red);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+/* Efectos decorativos */
+.quote-card::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, var(--quote-gold), var(--quote-red));
+  border-radius: 15px;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+.quote-card::after {
+  content: '♡';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.5rem;
+  color: var(--quote-red);
+  z-index: 3;
+  transform: rotate(15deg);
+}
+
+/* Estados de mensaje */
+.message {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quote-container {
+    min-height: 35vh;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .quote-card {
+    padding: 2rem 1.5rem;
+    max-width: 350px;
+  }
+  
+  .quote-text {
+    font-size: 1.1rem;
+  }
+  
+  .quote-text::before,
+  .quote-text::after {
+    font-size: 2.5rem;
+  }
+  
+  .quote-text::before {
+    left: -1rem;
+  }
+  
+  .quote-text::after {
+    right: -1rem;
+  }
+  
+  .quote-reference {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-card {
+    padding: 1.5rem 1rem;
+    max-width: 300px;
+  }
+  
+  .quote-text {
+    font-size: 1rem;
+  }
+  
+  .quote-text::before,
+  .quote-text::after {
+    font-size: 2rem;
+  }
+  
+  .quote-reference {
+    font-size: 0.85rem;
+  }
+}

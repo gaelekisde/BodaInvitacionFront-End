@@ -1,5 +1,6 @@
 const urlApi = () => {
-    return import.meta.env.VITE_API_URL || "https://boda-invitacion-digital-fqxy.vercel.app/api/";
+    return "http://localhost:3000/api/";
+    //return import.meta.env.VITE_API_URL || "https://boda-invitacion-digital-fqxy.vercel.app/api/";
 };
 
 const FAMILIA_TTL_MS = 2 * 60 * 1000;
@@ -168,3 +169,7 @@ const apiUtils = {
 };
 
 export default apiUtils;
+//TO DO
+//TItulos color negro
+//colores claritos
+//

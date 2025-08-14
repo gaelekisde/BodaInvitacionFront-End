@@ -9,7 +9,7 @@
 
 .menu-container {
   min-height: 100vh;
-  padding: 2rem 1rem;
+  padding: 1rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +24,7 @@
 }
 
 .menu-header {
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
@@ -40,8 +40,8 @@
 
 /* Estilo para la imagen de iniciales */
 .menu-monogram-image {
-  width: 180px;
-  height: 180px;
+  width: 140px;
+  height: 140px;
   object-fit: contain;
   object-position: center;
   filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
@@ -56,7 +56,7 @@
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
   max-width: 600px;
   width: 100%;
   align-items: start;
@@ -79,14 +79,14 @@
 }
 
 .menu-icon-circle {
-  width: 75px;
-  height: 75px;
+  width: 65px;
+  height: 65px;
   background-color: var(--menu-red);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
   box-shadow: var(--menu-shadow);
   transition: all 0.3s ease;
 }
@@ -148,24 +148,32 @@
 }
 
 @media (max-width: 480px) {
+  .menu-container {
+    padding: 0.5rem 1rem;
+  }
+  
+  .menu-header {
+    margin-bottom: 1rem;
+  }
+  
   .menu-monogram {
     font-size: 2.5rem;
   }
   
   .menu-monogram-image {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
   }
   
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1rem;
     max-width: 300px;
   }
   
   .menu-icon-circle {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
   }
   
   .menu-icon {
