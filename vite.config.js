@@ -6,7 +6,23 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
-    port: 5173
+    port: 5174,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false,
+        // keep /api prefix so frontend calls to /api/* map to backend /api/*
+        // if backend doesn't include /api in its routes, uncomment the rewrite below
+        // rewrite: (path) => path.replace(/^\/api/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            // Ensure cookies can be set cross-origin in dev if backend uses them
+            proxyReq.setHeader('Origin', 'http://localhost:5174');
+          });
+        }
+      }
+    }
   },
   build: {
     minify: 'terser',
