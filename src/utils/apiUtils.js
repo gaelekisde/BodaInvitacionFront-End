@@ -35,13 +35,38 @@ const login = async (codigo) => {
             })
         });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    // Invalida cache al cambiar de sesión
-    invalidateFamiliaCache();
+        // Invalida cache al cambiar de sesión
+        invalidateFamiliaCache();
+
+        if (data.message === "Login exitoso") {
+            // En iOS, esperar un poco para que las cookies se establezcan
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            if (isIOS) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            // Verificar que la sesión esté realmente establecida
+            const verifyRes = await getFamilia();
+            if (verifyRes.success && verifyRes.apellido && verifyRes.apellido !== "familia") {
+                return {
+                    success: true,
+                    data: data
+                };
+            } else {
+                // Si la verificación falla, esperar un poco más y reintentar
+                await new Promise(resolve => setTimeout(resolve, 300));
+                const retryRes = await getFamilia();
+                return {
+                    success: retryRes.success && retryRes.apellido && retryRes.apellido !== "familia",
+                    data: data
+                };
+            }
+        }
 
         return {
-            success: data.message === "Login exitoso",
+            success: false,
             data: data
         };
     } catch {
@@ -69,23 +94,42 @@ const getFamilia = async () => {
 
         // Nueva petición y guárdala como inflight
         familiaCache.inflight = (async () => {
-        const response = await fetch(`${urlApi()}families/me`, {
-            method: "GET",
-            credentials: "include",
-            headers: getAuthHeaders()
-        });
-        
-    // ...
-        
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-        const data = await response.json();
-        const apellido = data || "familia";
-        // Actualiza cache con TTL
-        familiaCache.apellido = apellido;
-        familiaCache.expiry = Date.now() + FAMILIA_TTL_MS;
-        return { success: true, apellido };
+            const response = await fetch(`${urlApi()}families/me`, {
+                method: "GET",
+                credentials: "include",
+                headers: getAuthHeaders()
+            });
+            
+            if (!response.ok) {
+                // En iOS, a veces el primer intento falla, intentar una vez más
+                if (response.status === 401) {
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                    if (isIOS) {
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                        const retryResponse = await fetch(`${urlApi()}families/me`, {
+                            method: "GET",
+                            credentials: "include",
+                            headers: getAuthHeaders()
+                        });
+                        if (!retryResponse.ok) {
+                            throw new Error(`Error: ${retryResponse.status}`);
+                        }
+                        const retryData = await retryResponse.json();
+                        const apellido = retryData || "familia";
+                        familiaCache.apellido = apellido;
+                        familiaCache.expiry = Date.now() + FAMILIA_TTL_MS;
+                        return { success: true, apellido };
+                    }
+                }
+                throw new Error(`Error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const apellido = data || "familia";
+            // Actualiza cache con TTL
+            familiaCache.apellido = apellido;
+            familiaCache.expiry = Date.now() + FAMILIA_TTL_MS;
+            return { success: true, apellido };
         })();
 
         const result = await familiaCache.inflight;
