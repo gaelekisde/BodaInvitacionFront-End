@@ -12,13 +12,13 @@
 }
 
 .quote-container {
-  min-height: 40vh;
+  min-height: 25vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.5rem;
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .quote-content {
@@ -32,8 +32,8 @@
 .quote-card {
   background: var(--quote-cream);
   border-radius: 15px;
-  padding: 2.5rem 2rem;
-  max-width: 500px;
+  padding: 1.5rem 1.5rem;
+  max-width: 450px;
   width: 100%;
   text-align: center;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
@@ -54,11 +54,11 @@
 
 .quote-text {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 500;
   color: var(--quote-text);
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.8rem;
   font-style: italic;
   position: relative;
 }
@@ -143,42 +143,14 @@
 /* Responsive */
 @media (max-width: 768px) {
   .quote-container {
-    min-height: 35vh;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
+    min-height: 20vh;
+    padding: 0.3rem;
+    margin-bottom: 0.3rem;
   }
   
   .quote-card {
-    padding: 2rem 1.5rem;
-    max-width: 350px;
-  }
-  
-  .quote-text {
-    font-size: 1.1rem;
-  }
-  
-  .quote-text::before,
-  .quote-text::after {
-    font-size: 2.5rem;
-  }
-  
-  .quote-text::before {
-    left: -1rem;
-  }
-  
-  .quote-text::after {
-    right: -1rem;
-  }
-  
-  .quote-reference {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .quote-card {
-    padding: 1.5rem 1rem;
-    max-width: 300px;
+    padding: 1.2rem 1rem;
+    max-width: 320px;
   }
   
   .quote-text {
@@ -187,10 +159,38 @@
   
   .quote-text::before,
   .quote-text::after {
-    font-size: 2rem;
+    font-size: 2.2rem;
+  }
+  
+  .quote-text::before {
+    left: -0.8rem;
+  }
+  
+  .quote-text::after {
+    right: -0.8rem;
   }
   
   .quote-reference {
     font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quote-card {
+    padding: 1rem 0.8rem;
+    max-width: 280px;
+  }
+  
+  .quote-text {
+    font-size: 0.9rem;
+  }
+  
+  .quote-text::before,
+  .quote-text::after {
+    font-size: 1.8rem;
+  }
+  
+  .quote-reference {
+    font-size: 0.8rem;
   }
 }

@@ -53,11 +53,11 @@ const Invitacion = () => {
           </div>
         </div>
       </div>
-      <div id="menu">
-        <Menu />
-      </div>
       <div id="quote">
         <Quote />
+      </div>
+      <div id="menu">
+        <Menu />
       </div>
       <div id="invitation">
         <Invitation />
