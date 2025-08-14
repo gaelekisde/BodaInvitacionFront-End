@@ -2,7 +2,7 @@
 
 /* Variables */
 :root {
-  --message-red: #c53030;
+  --message-red: #87ceeb;
   --message-text: #4a4a4a;
   --message-light-text: #666666;
   --message-dark: #2d3748;
@@ -119,7 +119,7 @@
 /* Botón */
 .send-button {
   width: 100%;
-  background: linear-gradient(135deg, var(--message-red), #b91c1c);
+  background: linear-gradient(135deg, var(--message-red), #da84ff);
   color: var(--message-white);
   border: none;
   border-radius: 15px;

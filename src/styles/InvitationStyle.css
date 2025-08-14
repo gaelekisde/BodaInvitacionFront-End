@@ -2,7 +2,7 @@
 
 /* Variables */
 :root {
-  --invitation-red: #c53030;
+  --invitation-red: #87ceeb;
   --invitation-text: #4a4a4a;
   --invitation-light-text: #666666;
   --invitation-white: #ffffff;
@@ -10,11 +10,11 @@
 }
 
 .invitation-container {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 1rem 1rem;
   position: relative;
 }
 
@@ -22,8 +22,8 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 4rem 3rem;
-  max-width: 500px;
+  padding: 3rem 2.5rem;
+  max-width: 480px;
   width: 100%;
   text-align: center;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);

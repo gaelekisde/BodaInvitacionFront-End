@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
 
 :root {
-  --menu-red: #c53030;
+  --menu-red: #87ceeb;
   --menu-text: #2c2c2c;
   --menu-white: #ffffff;
   --menu-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .menu-container {
-  min-height: 100vh;
-  padding: 1rem 1rem;
+  min-height: 70vh;
+  padding: 0.5rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +24,7 @@
 }
 
 .menu-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -56,8 +56,8 @@
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  max-width: 600px;
+  gap: 1rem;
+  max-width: 500px;
   width: 100%;
   align-items: start;
   justify-items: center;
@@ -149,11 +149,12 @@
 
 @media (max-width: 480px) {
   .menu-container {
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 1rem;
+    min-height: 50vh;
   }
   
   .menu-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;
   }
   
   .menu-monogram {
@@ -167,20 +168,20 @@
   
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    max-width: 300px;
+    gap: 0.8rem;
+    max-width: 280px;
   }
   
   .menu-icon-circle {
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
   }
   
   .menu-icon {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
   
   .menu-title {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 }

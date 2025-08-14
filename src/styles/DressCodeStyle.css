@@ -2,7 +2,7 @@
 
 /* Variables */
 :root {
-  --dresscode-red: #c53030;
+  --dresscode-celeste: #87ceeb;
   --dresscode-text: #4a4a4a;
   --dresscode-light-text: #666666;
   --dresscode-dark: #2d3748;
@@ -53,7 +53,7 @@
   font-family: 'Dancing Script', cursive;
   font-size: 3.5rem;
   font-weight: 600;
-  color: var(--dresscode-red);
+  color: var(--dresscode-celeste);
   margin: 0 0 0.5rem 0;
   line-height: 1;
 }
@@ -205,7 +205,7 @@
   transform: translateX(-50%);
   width: 60px;
   height: 40px;
-  background-color: var(--dresscode-red);
+  background-color: var(--dresscode-celeste);
   border-radius: 8px 8px 0 0;
 }
 
@@ -215,7 +215,7 @@
   top: -10px;
   width: 8px;
   height: 25px;
-  background-color: var(--dresscode-red);
+  background-color: var(--dresscode-celeste);
   border-radius: 4px;
 }
 
@@ -234,7 +234,7 @@
   transform: translateX(-50%);
   width: 50px;
   height: 15px;
-  background-color: var(--dresscode-red);
+  background-color: var(--dresscode-celeste);
 }
 
 .dress-skirt {
@@ -244,7 +244,7 @@
   transform: translateX(-50%);
   width: 100px;
   height: 80px;
-  background-color: var(--dresscode-red);
+  background-color: var(--dresscode-celeste);
   border-radius: 0 0 50px 50px;
   position: relative;
 }
