@@ -4,27 +4,30 @@ const urlApi = () => {
     const isDevelopment = import.meta.env.MODE === 'development';
     const apiUrl = import.meta.env.VITE_API_URL;
     
-    console.log('Environment:', { 
-        mode: import.meta.env.MODE, 
-        isDevelopment, 
-        apiUrl,
-        allEnv: import.meta.env 
-    });
+    // Solo log en desarrollo para evitar spam en producción
+    if (isDevelopment) {
+        console.log('Environment:', { 
+            mode: import.meta.env.MODE, 
+            isDevelopment, 
+            apiUrl,
+            userAgent: navigator.userAgent.includes('iPhone') ? 'iOS' : 'Other'
+        });
+    }
     
     if (!isDevelopment && apiUrl) {
         // Producción: usar URL absoluta del backend
         const finalUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
-        console.log('Using production API URL:', finalUrl);
+        if (isDevelopment) console.log('Using production API URL:', finalUrl);
         return finalUrl;
     } else if (!isDevelopment) {
         // Fallback para producción si no hay VITE_API_URL
         const fallbackUrl = "https://boda-invitacion-digital-fqxy.vercel.app/api/";
-        console.log('Using fallback API URL:', fallbackUrl);
+        if (isDevelopment) console.log('Using fallback API URL:', fallbackUrl);
         return fallbackUrl;
     }
     
     // Desarrollo: usar proxy relativo
-    console.log('Using development API URL: /api/');
+    if (isDevelopment) console.log('Using development API URL: /api/');
     return "/api/";
 };
 
@@ -41,7 +44,9 @@ const invalidateFamiliaCache = () => {
 
 const getAuthHeaders = () => {
     return {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Cache-Control": "no-cache"
     };
 };
 
@@ -50,13 +55,19 @@ const login = async (codigo) => {
         const response = await fetch(`${urlApi()}auth/login`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
             credentials: 'include',
+            mode: 'cors',
             body: JSON.stringify({
                 "CodigoFamilia": codigo
             })
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
 
     const data = await response.json();
 
@@ -67,7 +78,8 @@ const login = async (codigo) => {
             success: data.message === "Login exitoso",
             data: data
         };
-    } catch {
+    } catch (error) {
+        console.error('Login error:', error);
         // En producción, solo retorna el error
         return {
             success: false,
@@ -96,10 +108,12 @@ const getFamilia = async () => {
             const response = await fetch(`${urlApi()}families/me`, {
                 method: "GET",
                 credentials: "include",
+                mode: 'cors',
                 headers: getAuthHeaders()
             });
 
             if (!response.ok) {
+                console.error(`families/me error: ${response.status}`);
                 throw new Error(`Error: ${response.status}`);
             }
 
@@ -130,12 +144,14 @@ const actualizarEstado = async (estado = "Confirmado") => {
             method: "PATCH",
             headers: getAuthHeaders(),
             credentials: 'include',
+            mode: 'cors',
             body: JSON.stringify({
                 "estado": estado
             })
         });
         
         if (!response.ok) {
+            console.error(`actualizar-estado error: ${response.status}`);
             if (response.status === 401) {
                 throw new Error("Sesión expirada");
             }
@@ -147,6 +163,7 @@ const actualizarEstado = async (estado = "Confirmado") => {
             data: data
         };
     } catch (error) {
+        console.error('actualizarEstado error:', error);
         // En producción, solo retorna el error
         return {
             success: false,
@@ -162,10 +179,16 @@ const SendMessage = async (nuevoMensaje) => {
             method: "PATCH",
             headers: getAuthHeaders(),
             credentials: 'include',
+            mode: 'cors',
             body: JSON.stringify({
                 "nuevoMensaje": nuevoMensaje
             })
         });
+
+        if (!response.ok) {
+            console.error(`send-message error: ${response.status}`);
+            throw new Error(`Error: ${response.status}`);
+        }
 
         const data = await response.json();
         return {
@@ -173,6 +196,7 @@ const SendMessage = async (nuevoMensaje) => {
             data: data
         };
     } catch (error) {
+        console.error('SendMessage error:', error);
         // En producción, solo retorna el error
         return {
             success: false,
