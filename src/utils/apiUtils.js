@@ -1,10 +1,30 @@
 const urlApi = () => {
-    // Usa una URL relativa en desarrollo para pasar por el proxy de Vite (/api -> http://localhost:3000)
-    // y una URL absoluta en producción si VITE_API_URL está definida.
-    const base = import.meta?.env?.VITE_API_URL;
-    if (base) {
-        return base.endsWith('/') ? base : `${base}/`;
+    // En producción, usar la URL absoluta del backend
+    // En desarrollo, usar URL relativa para el proxy de Vite
+    const isDevelopment = import.meta.env.MODE === 'development';
+    const apiUrl = import.meta.env.VITE_API_URL;
+    
+    console.log('Environment:', { 
+        mode: import.meta.env.MODE, 
+        isDevelopment, 
+        apiUrl,
+        allEnv: import.meta.env 
+    });
+    
+    if (!isDevelopment && apiUrl) {
+        // Producción: usar URL absoluta del backend
+        const finalUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
+        console.log('Using production API URL:', finalUrl);
+        return finalUrl;
+    } else if (!isDevelopment) {
+        // Fallback para producción si no hay VITE_API_URL
+        const fallbackUrl = "https://boda-invitacion-digital-fqxy.vercel.app/api/";
+        console.log('Using fallback API URL:', fallbackUrl);
+        return fallbackUrl;
     }
+    
+    // Desarrollo: usar proxy relativo
+    console.log('Using development API URL: /api/');
     return "/api/";
 };
 
