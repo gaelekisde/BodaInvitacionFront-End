@@ -1,7 +1,36 @@
 const urlApi = () => {
-   //return "http://localhost:3000/api/";
-   //activar esto en produccion:
-   return "https://boda-invitacion-digital-fqxy.vercel.app/api/";
+    // En producción, usar la URL absoluta del backend
+    // En desarrollo, usar URL relativa para el proxy de Vite
+    const isDevelopment = import.meta.env.MODE === 'development';
+    const apiUrl = import.meta.env.VITE_API_URL;
+    
+    // Solo log en desarrollo para evitar spam en producción
+    if (isDevelopment) {
+        console.log('Environment:', { 
+            mode: import.meta.env.MODE, 
+            isDevelopment, 
+            apiUrl,
+            userAgent: navigator.userAgent.includes('iPhone') ? 'iOS' : 'Other'
+        });
+    }
+    
+    // En desarrollo, SIEMPRE usar el proxy relativo
+    if (isDevelopment) {
+        console.log('Using development API URL (proxy): /api/');
+        return "/api/";
+    }
+    
+    // En producción, usar la URL configurada o fallback
+    if (apiUrl) {
+        const finalUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
+        console.log('Using production API URL:', finalUrl);
+        return finalUrl;
+    } else {
+        // Fallback para producción si no hay VITE_API_URL
+        const fallbackUrl = "https://boda-invitacion-digital-fqxy.vercel.app/api/";
+        console.log('Using fallback API URL:', fallbackUrl);
+        return fallbackUrl;
+    }
 };
 
 // Simple headers for API requests (no authentication needed)
@@ -93,12 +122,21 @@ const getFamilia = async (codigoFamilia) => {
 
         // Debug en desarrollo
         const isDevelopment = import.meta.env.MODE === 'development';
+        const finalUrl = `${urlApi()}families/${codigo}`;
+        
+        console.log('getFamilia - Making request to:', finalUrl);
+        console.log('getFamilia - Environment mode:', import.meta.env.MODE);
         
         if (isDevelopment) {
-            console.log('Making request to:', `${urlApi()}families/${codigo}`);
+            console.log('getFamilia - Development mode - request details:', {
+                url: finalUrl,
+                method: 'GET',
+                headers: getHeaders(),
+                mode: 'cors'
+            });
         }
 
-        const response = await fetch(`${urlApi()}families/${codigo}`, {
+        const response = await fetch(finalUrl, {
             method: "GET",
             mode: 'cors',
             headers: getHeaders()
@@ -113,7 +151,8 @@ const getFamilia = async (codigoFamilia) => {
         const apellido = data.Apellido || "familia";
 
         return { success: true, apellido };
-    } catch {
+    } catch (error) {
+        console.error('getFamilia error:', error);
         return { success: false, apellido: "familia" };
     }
 };
