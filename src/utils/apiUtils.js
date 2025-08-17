@@ -1,351 +1,168 @@
-const urlApi = () => {
-    // En producción, usar la URL absoluta del backend
-    // En desarrollo, usar URL relativa para el proxy de Vite
-    const isDevelopment = import.meta.env.MODE === 'development';
-    const apiUrl = import.meta.env.VITE_API_URL;
-    
-    // Solo log en desarrollo para evitar spam en producción
-    if (isDevelopment) {
-        console.log('Environment:', { 
-            mode: import.meta.env.MODE, 
-            isDevelopment, 
-            apiUrl,
-            userAgent: navigator.userAgent.includes('iPhone') ? 'iOS' : 'Other'
-        });
-    }
-    
-    // En desarrollo, SIEMPRE usar el proxy relativo
-    if (isDevelopment) {
-        console.log('Using development API URL (proxy): /api/');
-        return "/api/";
-    }
-    
-    // En producción, usar la URL configurada o fallback
-    if (apiUrl) {
-        const finalUrl = apiUrl.endsWith('/') ? apiUrl : `${apiUrl}/`;
-        console.log('Using production API URL:', finalUrl);
-        return finalUrl;
-    } else {
-        // Fallback para producción si no hay VITE_API_URL
-        const fallbackUrl = "https://boda-invitacion-digital-fqxy.vercel.app/api/";
-        console.log('Using fallback API URL:', fallbackUrl);
-        return fallbackUrl;
+// apiUtils optimizado — más rápido y más limpio
+
+const IS_DEV = import.meta.env.MODE === 'development';
+const RAW_API_URL = import.meta.env.VITE_API_URL || "";
+// En dev siempre usamos proxy relativo "/api/"
+// En prod usamos VITE_API_URL (si existe) o fallback
+const BASE_API_URL = (IS_DEV ? "/api/" : (RAW_API_URL ? (RAW_API_URL.endsWith('/') ? RAW_API_URL : `${RAW_API_URL}/`) : "https://boda-invitacion-digital-fqxy.vercel.app/api/"));
+
+// Dev logs helper (no logs en producción)
+const dlog = (...args) => { if (IS_DEV) console.log(...args); };
+
+// Reusar headers (objeto inmutable)
+const DEFAULT_HEADERS = Object.freeze({
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Cache-Control": "no-cache"
+});
+
+// Small helper to safely access localStorage (returns null on error)
+const safeLocalStorage = {
+    set(key, value) {
+        try { localStorage.setItem(key, value); } catch (e) { console.error('localStorage.set error', e); }
+    },
+    get(key) {
+        try { return localStorage.getItem(key); } catch (e) { console.error('localStorage.get error', e); return null; }
+    },
+    remove(key) {
+        try { localStorage.removeItem(key); } catch (e) { console.error('localStorage.remove error', e); }
     }
 };
 
-// Simple headers for API requests (no authentication needed)
-const getHeaders = () => {
-    return {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Cache-Control": "no-cache"
+// Exported small helpers for codigoFamilia
+const setCodigoFamilia = (codigoFamilia) => safeLocalStorage.set('codigoFamilia', codigoFamilia);
+const getCodigoFamilia = () => safeLocalStorage.get('codigoFamilia');
+const clearCodigoFamilia = () => safeLocalStorage.remove('codigoFamilia');
+
+// Normalizar construcción de URL base + ruta sin introducir // dobles
+const buildUrl = (path = "") => {
+    const trimmedBase = BASE_API_URL.endsWith('/') ? BASE_API_URL : `${BASE_API_URL}/`;
+    const trimmedPath = `${path || ""}`.replace(/^\/+/, '');
+    return `${trimmedBase}${trimmedPath}`;
+};
+
+// Wrapper genérico para fetch que devuelve { success, data?, error? }
+const request = async (method, path, body = undefined) => {
+    const url = buildUrl(path);
+    const opts = {
+        method,
+        headers: DEFAULT_HEADERS,
+        // mode defaults are usually sufficient; solo poner si hay problemas CORS en prod
+        // mode: 'cors'
     };
-};
+    if (body !== undefined) opts.body = JSON.stringify(body);
 
-// Helper functions for managing codigoFamilia in localStorage
-const setCodigoFamilia = (codigoFamilia) => {
+    dlog('request', { method, url, body });
+
     try {
-        localStorage.setItem('codigoFamilia', codigoFamilia);
+        const res = await fetch(url, opts);
+        if (!res.ok) {
+            const text = await res.text().catch(() => '');
+            // Intenta parsear JSON si viene, si no muestra text
+            let parsed;
+            try { parsed = text ? JSON.parse(text) : null; } catch { parsed = text; }
+            const errMsg = parsed && parsed.message ? parsed.message : `HTTP ${res.status}`;
+            return { success: false, error: errMsg, status: res.status, raw: parsed };
+        }
+        // Intentamos parsear JSON — en APIs habituales este es el caso
+        const data = await res.json().catch(() => null);
+        return { success: true, data };
     } catch (error) {
-        console.error('Error saving codigoFamilia:', error);
+        console.error('request error', error);
+        return { success: false, error: error.message || 'Network error' };
     }
 };
 
-const getCodigoFamilia = () => {
-    try {
-        return localStorage.getItem('codigoFamilia');
-    } catch (error) {
-        console.error('Error retrieving codigoFamilia:', error);
-        return null;
-    }
-};
+// Mantener compatibilidad con nombre urlApi (devuelve la base)
+const urlApi = () => BASE_API_URL;
 
-const clearCodigoFamilia = () => {
-    try {
-        localStorage.removeItem('codigoFamilia');
-    } catch (error) {
-        console.error('Error clearing codigoFamilia:', error);
-    }
-};
+// API functions
 
 const login = async (codigo) => {
-    try {
-        const response = await fetch(`${urlApi()}auth/login`, {
-            method: "POST",
-            headers: getHeaders(),
-            mode: 'cors',
-            body: JSON.stringify({
-                "CodigoFamilia": codigo
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+    const payload = { CodigoFamilia: codigo };
+    const result = await request("POST", "auth/login", payload);
+    if (result.success && result.data) {
+        dlog('Login response data:', result.data);
+        if (result.data.message === "Login exitoso" && result.data.codigoFamilia) {
+            setCodigoFamilia(result.data.codigoFamilia);
         }
-
-        const data = await response.json();
-
-        // Debug en desarrollo
-        const isDevelopment = import.meta.env.MODE === 'development';
-        if (isDevelopment) {
-            console.log('Login response data:', data);
-        }
-
-        // Store codigoFamilia if login is successful
-        if (data.message === "Login exitoso" && data.codigoFamilia) {
-            setCodigoFamilia(data.codigoFamilia);
-        }
-
-        return {
-            success: data.message === "Login exitoso",
-            data: data
-        };
-    } catch (error) {
-        console.error('Login error:', error);
-        return {
-            success: false,
-            error: "Error de conexión. Intenta nuevamente."
-        };
+        return { success: result.data.message === "Login exitoso", data: result.data };
     }
+    return { success: false, error: result.error || 'Error de conexión. Intenta nuevamente.' };
 };
 
+const getFamilia = async (codigoFamiliaParam) => {
+    const codigo = codigoFamiliaParam || getCodigoFamilia();
+    if (!codigo) return { success: false, apellido: "familia", error: "No codigoFamilia" };
 
-const getFamilia = async (codigoFamilia) => {
-    try {
-        // If no codigoFamilia provided, get it from localStorage
-        const codigo = codigoFamilia || getCodigoFamilia();
-        
-        if (!codigo) {
-            console.error('No codigoFamilia available');
-            return { success: false, apellido: "familia" };
-        }
+    dlog('getFamilia - request to', `families/${codigo}`);
+    const result = await request("GET", `families/${codigo}`);
+    if (!result.success) return { success: false, apellido: "familia", error: result.error };
 
-        // Debug en desarrollo
-        const isDevelopment = import.meta.env.MODE === 'development';
-        const finalUrl = `${urlApi()}families/${codigo}`;
-        
-        console.log('getFamilia - Making request to:', finalUrl);
-        console.log('getFamilia - Environment mode:', import.meta.env.MODE);
-        
-        if (isDevelopment) {
-            console.log('getFamilia - Development mode - request details:', {
-                url: finalUrl,
-                method: 'GET',
-                headers: getHeaders(),
-                mode: 'cors'
-            });
-        }
-
-        const response = await fetch(finalUrl, {
-            method: "GET",
-            mode: 'cors',
-            headers: getHeaders()
-        });
-
-        if (!response.ok) {
-            console.error(`families/${codigo} error: ${response.status}`);
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const apellido = data.Apellido || "familia";
-
-        return { success: true, apellido };
-    } catch (error) {
-        console.error('getFamilia error:', error);
-        return { success: false, apellido: "familia" };
-    }
+    const apellido = result.data?.Apellido || "familia";
+    return { success: true, apellido, data: result.data };
 };
 
-
-const actualizarEstado = async (codigoFamiliaOrEstado, estado) => {
-    try {
-        let codigo, estadoFinal;
-        
-        // Handle different calling patterns:
-        // 1. Old: actualizarEstado("Confirmado") - only estado provided
-        // 2. New: actualizarEstado("MAR01", "Confirmado") - both provided
-        // 3. New: actualizarEstado(null, "Confirmado") - use stored codigo
-        
-        if (typeof codigoFamiliaOrEstado === 'string' && !estado) {
-            // Old calling pattern: actualizarEstado("Confirmado")
-            codigo = getCodigoFamilia();
-            estadoFinal = codigoFamiliaOrEstado;
-        } else {
-            // New calling pattern: actualizarEstado(codigoFamilia, estado)
-            codigo = codigoFamiliaOrEstado || getCodigoFamilia();
-            estadoFinal = estado || "Confirmado";
-        }
-        
-        if (!codigo) {
-            console.error('No codigoFamilia available');
-            return { success: false, error: "No se encontró el código de familia" };
-        }
-
-        console.log('actualizarEstado - Making request to:', `${urlApi()}families/${codigo}/actualizar-estado`);
-        console.log('actualizarEstado - Estado:', estadoFinal);
-
-        const response = await fetch(`${urlApi()}families/${codigo}/actualizar-estado`, {
-            method: "PATCH",
-            headers: getHeaders(),
-            mode: 'cors',
-            body: JSON.stringify({
-                "estado": estadoFinal
-            })
-        });
-        
-        if (!response.ok) {
-            console.error(`actualizar-estado error: ${response.status}`);
-            throw new Error("Error en la petición");
-        }
-        const data = await response.json();
-        return {
-            success: true,
-            data: data
-        };
-    } catch (error) {
-        console.error('actualizarEstado error:', error);
-        return {
-            success: false,
-            error: error.message
-        };
+const actualizarEstado = async (codigoFamiliaOrEstado, estadoParam) => {
+    // Soporta las mismas firmas: actualizarEstado("Confirmado") | actualizarEstado("COD", "Confirmado") | actualizarEstado(null, "Confirmado")
+    let codigo, estado;
+    if (typeof codigoFamiliaOrEstado === 'string' && !estadoParam) {
+        estado = codigoFamiliaOrEstado;
+        codigo = getCodigoFamilia();
+    } else {
+        codigo = codigoFamiliaOrEstado || getCodigoFamilia();
+        estado = estadoParam || "Confirmado";
     }
+    if (!codigo) return { success: false, error: "No se encontró el código de familia" };
+
+    dlog('actualizarEstado', { codigo, estado });
+    const result = await request("PATCH", `families/${codigo}/actualizar-estado`, { estado });
+    if (!result.success) return { success: false, error: result.error };
+    return { success: true, data: result.data };
 };
 
-const SendMessage = async (codigoFamilia, nuevoMensaje) => {
-    try {
-        // If codigoFamilia is actually the message (old API usage), handle it
-        let codigo, mensaje;
-        if (typeof codigoFamilia === 'string' && !nuevoMensaje) {
-            // Old usage: SendMessage(message)
-            codigo = getCodigoFamilia();
-            mensaje = codigoFamilia;
-        } else {
-            // New usage: SendMessage(codigoFamilia, message) or SendMessage(null, message)
-            codigo = codigoFamilia || getCodigoFamilia();
-            mensaje = nuevoMensaje;
-        }
-        
-        if (!codigo) {
-            console.error('No codigoFamilia available');
-            return { success: false, error: "No se encontró el código de familia" };
-        }
-
-        const response = await fetch(`${urlApi()}families/${codigo}/mensaje`, {
-            method: "PATCH",
-            headers: getHeaders(),
-            mode: 'cors',
-            body: JSON.stringify({
-                "nuevoMensaje": mensaje
-            })
-        });
-
-        if (!response.ok) {
-            console.error(`send-message error: ${response.status}`);
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return {
-            success: true,
-            data: data
-        };
-    } catch (error) {
-        console.error('SendMessage error:', error);
-        return {
-            success: false,
-            error: error.message
-        };
+const SendMessage = async (codigoFamiliaOrMensaje, mensajeParam) => {
+    // Soporta SendMessage(message) o SendMessage(codigo, message) o SendMessage(null, message)
+    let codigo, mensaje;
+    if (typeof codigoFamiliaOrMensaje === 'string' && mensajeParam === undefined) {
+        mensaje = codigoFamiliaOrMensaje;
+        codigo = getCodigoFamilia();
+    } else {
+        codigo = codigoFamiliaOrMensaje || getCodigoFamilia();
+        mensaje = mensajeParam;
     }
-}
+    if (!codigo) return { success: false, error: "No se encontró el código de familia" };
+    if (mensaje === undefined || mensaje === null) return { success: false, error: "Mensaje vacío" };
 
-// Additional API functions for complete CRUD operations
+    const result = await request("PATCH", `families/${codigo}/mensaje`, { nuevoMensaje: mensaje });
+    if (!result.success) return { success: false, error: result.error };
+    return { success: true, data: result.data };
+};
 
 const getAllFamilies = async () => {
-    try {
-        const response = await fetch(`${urlApi()}families`, {
-            method: "GET",
-            headers: getHeaders(),
-            mode: 'cors'
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return {
-            success: true,
-            data: data
-        };
-    } catch (error) {
-        console.error('getAllFamilies error:', error);
-        return {
-            success: false,
-            error: error.message
-        };
-    }
+    const result = await request("GET", "families");
+    if (!result.success) return { success: false, error: result.error };
+    return { success: true, data: result.data };
 };
 
 const createFamily = async (familyData) => {
-    try {
-        const response = await fetch(`${urlApi()}families`, {
-            method: "POST",
-            headers: getHeaders(),
-            mode: 'cors',
-            body: JSON.stringify(familyData)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return {
-            success: true,
-            data: data
-        };
-    } catch (error) {
-        console.error('createFamily error:', error);
-        return {
-            success: false,
-            error: error.message
-        };
-    }
+    const result = await request("POST", "families", familyData);
+    if (!result.success) return { success: false, error: result.error };
+    return { success: true, data: result.data };
 };
 
 const deleteFamily = async (id) => {
-    try {
-        const response = await fetch(`${urlApi()}families/${id}`, {
-            method: "DELETE",
-            headers: getHeaders(),
-            mode: 'cors'
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return {
-            success: true,
-            data: data
-        };
-    } catch (error) {
-        console.error('deleteFamily error:', error);
-        return {
-            success: false,
-            error: error.message
-        };
-    }
+    if (!id) return { success: false, error: "ID requerido" };
+    const result = await request("DELETE", `families/${id}`);
+    if (!result.success) return { success: false, error: result.error };
+    return { success: true, data: result.data };
 };
-const logout = () => {
-    clearCodigoFamilia();
-};
+
+const logout = () => { clearCodigoFamilia(); dlog('logout - codigoFamilia cleared'); };
 
 const apiUtils = {
     urlApi,
-    getHeaders,
+    getHeaders: () => DEFAULT_HEADERS,
     login,
     logout,
     getFamilia,
@@ -360,7 +177,3 @@ const apiUtils = {
 };
 
 export default apiUtils;
-//TO DO
-//TItulos color negro
-//colores claritos
-//
