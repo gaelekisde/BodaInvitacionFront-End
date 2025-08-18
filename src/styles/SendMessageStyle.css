@@ -2,7 +2,7 @@
 
 /* Variables */
 :root {
-  --message-red: #87ceeb;
+  --message-red: #ded0e9;
   --message-text: #4a4a4a;
   --message-light-text: #666666;
   --message-dark: #2d3748;
@@ -50,7 +50,7 @@
   font-family: 'Dancing Script', cursive;
   font-size: 3.5rem;
   font-weight: 600;
-  color: var(--message-red);
+  color: var(--title-color);
   margin: 0 0 0.5rem 0;
   line-height: 1;
 }
@@ -102,7 +102,7 @@
 .form-textarea:focus {
   outline: none;
   border-color: var(--message-red);
-  box-shadow: 0 0 0 3px rgba(197, 48, 48, 0.1);
+  box-shadow: 0 0 0 3px rgba(222, 208, 233, 0.1);
 }
 
 .form-input::placeholder,
@@ -140,11 +140,12 @@
 
 .send-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(197, 48, 48, 0.3);
+  box-shadow: 0 8px 25px rgba(222, 208, 233, 0.3);
 }
 
 .send-button:active {
   transform: translateY(0);
+  background: linear-gradient(135deg, var(--button-active-color), #da84ff);
 }
 
 .button-text {

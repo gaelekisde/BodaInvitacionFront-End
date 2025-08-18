@@ -26,6 +26,12 @@ const Menu = () => {
       action: () => scrollToSection("dresscode")
     },
     {
+      id: 8,
+      title: "Política de invitados",
+      icon: "👥",
+      action: () => scrollToSection("guest-policy")
+    },
+    {
   id: 6,
       title: "Cuenta regresiva",
       icon: "🥂",
@@ -55,7 +61,7 @@ const Menu = () => {
     <div className="menu-container">
       <div className="menu-header">
         <img 
-          src="/images/Icons/Initials.png" 
+          src="/images/Icons/FlowerMAinIcon.png" 
           alt="Iniciales de la pareja" 
           className="menu-monogram-image"
         />

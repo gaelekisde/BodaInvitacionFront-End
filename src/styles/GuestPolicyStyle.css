@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+/* Variables */
+:root {
+  --guest-policy-red: #ded0e9;
+  --guest-policy-text: #4a4a4a;
+  --guest-policy-light-text: #666666;
+  --guest-policy-dark: #2d3748;
+  --guest-policy-white: #ffffff;
+  --guest-policy-cream: #f8f5f0;
+}
+
+.guest-policy-container {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.guest-policy-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
+  width: 85%;
+}
+
+.guest-policy-card {
+  background: var(--guest-policy-cream);
+  border-radius: 15px;
+  padding: 3rem 2.5rem;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  position: relative;
+  transform: rotate(1deg);
+  transition: transform 0.3s ease;
+}
+
+.guest-policy-card:hover {
+  transform: rotate(0deg);
+}
+
+.card-text {
+  position: relative;
+  z-index: 2;
+}
+
+.guest-policy-message {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--guest-policy-text);
+  line-height: 1.8;
+  margin: 0;
+  font-style: italic;
+  text-align: justify;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .guest-policy-container {
+    padding: 1rem;
+    min-height: 50vh;
+  }
+  
+  .guest-policy-card {
+    padding: 2rem 1.5rem;
+    max-width: 450px;
+  }
+  
+  .guest-policy-message {
+    font-size: 1.25rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 480px) {
+  .guest-policy-container {
+    padding: 0.5rem;
+    min-height: 45vh;
+  }
+  
+  .guest-policy-card {
+    padding: 1.5rem 1.2rem;
+    max-width: 380px;
+  }
+  
+  .guest-policy-message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+}

@@ -2,7 +2,7 @@
 
 /* Variables */
 :root {
-  --ubication-red: #87ceeb;
+  --ubication-red: #ded0e9;
   --ubication-text: #4a4a4a;
   --ubication-light-text: #666666;
   --ubication-dark: #2d3748;
@@ -72,17 +72,18 @@
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(197, 48, 48, 0.3);
+  box-shadow: 0 4px 15px rgba(222, 208, 233, 0.3);
 }
 
 .location-button:hover {
-  background: #a02828;
+  background: var(--button-active-color);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(197, 48, 48, 0.4);
+  box-shadow: 0 6px 20px rgba(222, 208, 233, 0.4);
 }
 
 .location-button:active {
   transform: translateY(0);
+  background: var(--button-active-color);
 }
 
 /* Responsive Design */

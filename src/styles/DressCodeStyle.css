@@ -2,7 +2,7 @@
 
 /* Variables */
 :root {
-  --dresscode-celeste: #87ceeb;
+  --dresscode-celeste: #ded0e9;
   --dresscode-text: #4a4a4a;
   --dresscode-light-text: #666666;
   --dresscode-dark: #2d3748;
@@ -53,7 +53,7 @@
   font-family: 'Dancing Script', cursive;
   font-size: 3.5rem;
   font-weight: 600;
-  color: var(--dresscode-celeste);
+  color: var(--title-color);
   margin: 0 0 0.5rem 0;
   line-height: 1;
 }
@@ -87,7 +87,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.4rem;
   font-weight: 500;
-  color: var(--dresscode-text);
+  color: var(--title-color);
   margin: 0 0 2rem 0;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -281,7 +281,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.2rem;
   font-weight: 500;
-  color: var(--dresscode-text);
+  color: var(--title-color);
   margin: 0 0 1.5rem 0;
   text-transform: uppercase;
   letter-spacing: 2px;

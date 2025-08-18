@@ -2,7 +2,7 @@
 
 /* Variables */
 :root {
-  --counter-celeste: #87ceeb;
+  --counter-celeste: #ded0e9;
   --counter-text: #4a4a4a;
   --counter-light-text: #666666;
   --counter-dark: #2d3748;
@@ -50,7 +50,7 @@
   font-family: 'Dancing Script', cursive;
   font-size: 4rem;
   font-weight: 600;
-  color: var(--counter-celeste);
+  color: var(--title-color);
   margin: 0 0 1rem 0;
   line-height: 1;
 }
@@ -85,7 +85,7 @@
   font-family: 'Playfair Display', serif;
   font-size: 4rem;
   font-weight: 600;
-  color: var(--counter-dark);
+  color: var(--number-color);
   line-height: 1;
   margin-bottom: 0.5rem;
 }

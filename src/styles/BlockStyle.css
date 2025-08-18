@@ -246,6 +246,7 @@ body {
   .enter-button:active:not(:disabled) {
     transform: translateY(0);
     box-shadow: 0 2px 10px rgba(195, 170, 146, 0.3);
+    background: var(--button-active-color);
   }
   
   .enter-button:disabled {

@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import Quote from "./Quote";
 import Invitation from "./Invitation";
 import DressCode from "./DressCode";
+import GuestPolicy from "./GuestPolicy";
 import Counter from "./Counter";
 import Confirmation from "./Confirmation";
 import Ubication from "./Ubication";
@@ -61,6 +62,9 @@ const Invitacion = () => {
       </div>
       <div id="invitation">
         <Invitation />
+      </div>
+      <div id="guest-policy">
+        <GuestPolicy />
       </div>
       <div id="dresscode">
         <DressCode />

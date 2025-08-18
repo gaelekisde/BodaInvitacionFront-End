@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
 
 :root {
-  --menu-red: #87ceeb;
+  --menu-red: #ded0e9;
   --menu-text: #2c2c2c;
   --menu-white: #ffffff;
   --menu-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -9,7 +9,7 @@
 
 .menu-container {
   min-height: 70vh;
-  padding: 0.5rem 1rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +24,7 @@
 }
 
 .menu-header {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
@@ -55,12 +55,20 @@
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  max-width: 500px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2rem 1.5rem;
+  max-width: 400px;
   width: 100%;
   align-items: start;
   justify-items: center;
+  margin: 0 auto;
+}
+
+/* Centrar el último elemento (Enviar mensaje) */
+.menu-item:last-child {
+  grid-column: 1 / -1;
+  justify-self: center;
 }
 
 .menu-item {
@@ -92,9 +100,14 @@
 }
 
 .menu-item:hover .menu-icon-circle {
-  background-color: #a02626;
+  background-color: var(--button-active-color);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   transform: scale(1.05);
+}
+
+.menu-item:active .menu-icon-circle {
+  background-color: var(--button-active-color);
+  transform: scale(0.95);
 }
 
 .menu-icon {
@@ -106,7 +119,7 @@
   font-family: 'Playfair Display', serif;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--menu-text);
+  color: var(--title-color);
   margin: 0;
   line-height: 1.3;
   text-align: center;
@@ -123,19 +136,20 @@
   }
   
   .menu-monogram-image {
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
   }
   
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    max-width: 350px;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1.5rem 1rem;
+    max-width: 320px;
   }
   
   .menu-icon-circle {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
   }
   
   .menu-icon {
@@ -149,12 +163,12 @@
 
 @media (max-width: 480px) {
   .menu-container {
-    padding: 0.3rem 1rem;
-    min-height: 50vh;
+    padding: 1rem;
+    min-height: 60vh;
   }
   
   .menu-header {
-    margin-bottom: 0.7rem;
+    margin-bottom: 1.5rem;
   }
   
   .menu-monogram {
@@ -168,17 +182,18 @@
   
   .menu-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1rem 0.8rem;
     max-width: 280px;
   }
   
   .menu-icon-circle {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
   }
   
   .menu-icon {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
   
   .menu-title {

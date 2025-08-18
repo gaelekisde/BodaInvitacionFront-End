@@ -8,6 +8,9 @@
   --film-black: #1a1a1a;
   --white: #ffffff;
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --button-active-color: #ded0e9;
+  --title-color: rgb(104, 108, 244);
+  --number-color: rgb(104, 108, 244);
 }
 
 * {
